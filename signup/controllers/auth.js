@@ -27,7 +27,7 @@ exports.signup = (req, res) => {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-             user: 'fahad.khalid01234@address.com',
+             user: 'fahad.khalid01234@gmail.com',
              pass: 'Khalid@543'
          }
      });
