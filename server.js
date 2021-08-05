@@ -13,7 +13,7 @@ app.use(cors());
 //middleswares
 app.use('/api' , authRoutes);
 
-const port = process.env.PORT || 3000
+let port = process.env.PORT ;
 if(port == null || port == ""){
 port = 3000
 }
