@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 //middleswares
-app.use('/api' , authRoutes);
+//app.use('/api' , authRoutes);
 
 let port = process.env.PORT ;
 if(port == null || port == ""){
