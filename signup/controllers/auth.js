@@ -1,6 +1,7 @@
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const mailgun = require("mailgun-js");
+var nodemailer = require('nodemailer');
 const DOMAIN = "sandbox2b916e76cd2a4252857fd06f12630f01.mailgun.org";
 const mg = mailgun({
   apiKey: "088d7659afeda9959ea720c34d614879-64574a68-44a35e8d",
@@ -23,26 +24,25 @@ exports.signup = (req, res) => {
       { expiresIn: "20m" }
     );
 
-    const data = {
-      from: "noreply@hello.com",
-      to: email,
-      subject: "Account activation link",
-      html: `
-     <h2>Please click on given link to activate the account</h2>
-     <p>http://localhost:3000/authentication/activate/${token}</p>
- 
-     `,
-    };
-    mg.messages().send(data, function (error, body) {
-      if (error) {
-        return res.json({
-          error: "wrong",
-        });
-      }
-      return res.json({
-        message: "email has been sent , kindly activate your account",
-      });
-    });
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+             user: 'fahad.khalid01234@address.com',
+             pass: 'Khalid@543'
+         }
+     });
+     const mailOptions = {
+       from: 'fahad.khalid01234@gmail.com', // sender address
+       to: email, // list of receivers
+       subject: 'Subject of your email', // Subject line
+       html: '<p>Your html here</p>'// plain text body
+     };
+     transporter.sendMail(mailOptions, function (err, info) {
+        if(err)
+          console.log(err)
+        else
+          console.log(info);
+     });
   });
 };
 exports.activateAccount = (req, res) => {
@@ -83,3 +83,5 @@ console.log(newUser);
     return res.json({ error: "something went wrong" });
   }
 };
+
+

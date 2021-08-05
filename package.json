@@ -8,6 +8,7 @@
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
     "mongoose": "^5.13.5",
+    "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
     "validator": "^13.6.0"
   },
@@ -20,8 +21,8 @@
   },
   "author": "",
   "license": "ISC",
-  "engines" : {
-    "node" : "16.4.1"
+  "engines": {
+    "node": "16.4.1"
   },
   "description": ""
 }
