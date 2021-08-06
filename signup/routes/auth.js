@@ -6,10 +6,10 @@ const router = express.Router();
 //import controllers
 const { activateAccount } = require("../controllers/auth");
 const { signup } = require("../controllers/auth");
-router.post("/signup", signup);
-router.post("/email-activate", activateAccount);
+router.post("/visitor/signup", signup);
+// router.post("/email-activate", activateAccount);
 
-router.get('/signup' ,  async (req, res)=>{
+router.get('/visitor/allUsers' ,  async (req, res)=>{
   try{
       const users = await User.find({})
       res.send(users);
