@@ -2,7 +2,7 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 
 var nodemailer = require("nodemailer");
-
+const _ = require("lodash");
 exports.signup = (req, res) => {
   console.log(req.body);
   const { name, username, PhoneNumber, email, dateOfBirth, password } =
@@ -27,6 +27,32 @@ exports.signup = (req, res) => {
         return res.status(400).json({ error: "error in activating account" });
       }
       res.json({ message: "signup successful" });
+    });
+  });
+};
+
+exports.forgetPassword = function (req, res) {
+  const { email, newpass } = req.body;
+  console.log("done")
+  if(newpass.length<8) {
+    return res.status(400).json({ error: "password length less than 8 characters!!!" });
+    }
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) {
+      return res.status(400).json({ error: "user does not exist" });
+    }
+    const obj = {
+      password: newpass,
+    };
+    user = _.extend(user, obj);
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: "reset password error" });
+      } else {
+        return res
+          .status(200)
+          .json({ message: "password changed , please login" });
+      }
     });
   });
 };
