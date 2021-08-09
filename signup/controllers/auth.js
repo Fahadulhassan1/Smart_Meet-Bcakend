@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
   console.log(req.body);
   const { name, username, PhoneNumber, email, dateOfBirth, password } =
     req.body;
-  const avatar = await req.file.buffer;
+  const avatar =  req.file.buffer;
 
   User.findOne({ email }).exec((err, user) => {
     if (user) {
