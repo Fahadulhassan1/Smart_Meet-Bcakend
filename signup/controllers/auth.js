@@ -3,10 +3,12 @@ const jwt = require("jsonwebtoken");
 
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   console.log(req.body);
   const { name, username, PhoneNumber, email, dateOfBirth, password } =
     req.body;
+    const avatar = await req.file.buffer;
+    
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res
@@ -20,6 +22,7 @@ exports.signup = (req, res) => {
       email,
       dateOfBirth,
       password,
+      avatar
     });
     console.log(newUser);
     newUser.save((err, sucess) => {

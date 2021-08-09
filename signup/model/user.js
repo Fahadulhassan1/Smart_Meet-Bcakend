@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  avatar: {
+  type : Buffer,
+  required : true,
+  }
 }, {timestamps: true} );
 const User =  mongoose.model('User' , userSchema)
 
