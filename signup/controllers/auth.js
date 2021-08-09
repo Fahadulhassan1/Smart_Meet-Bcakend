@@ -63,7 +63,7 @@ exports.forgetPassword = function (req, res) {
 };
 exports.profilepicture = async (req, res) => {
   try {
-    const users = await User.findOne(req.params.email);
+    const users = await User.findById(req.params.id);
     if (!users || !users.avatar) {
       throw new Error("image does not exist");
     }
