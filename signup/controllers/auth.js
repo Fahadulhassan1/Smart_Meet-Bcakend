@@ -7,8 +7,8 @@ exports.signup = async (req, res) => {
   console.log(req.body);
   const { name, username, PhoneNumber, email, dateOfBirth, password } =
     req.body;
-    const avatar = await req.file.buffer;
-    
+  const avatar = await req.file.buffer;
+
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res
@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
       email,
       dateOfBirth,
       password,
-      avatar
+      avatar,
     });
     console.log(newUser);
     newUser.save((err, sucess) => {
@@ -36,10 +36,12 @@ exports.signup = async (req, res) => {
 
 exports.forgetPassword = function (req, res) {
   const { email, newpass } = req.body;
-  console.log("done")
-  if(newpass.length<8) {
-    return res.status(400).json({ error: "password length less than 8 characters!!!" });
-    }
+  console.log("done");
+  if (newpass.length < 8) {
+    return res
+      .status(400)
+      .json({ error: "password length less than 8 characters!!!" });
+  }
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({ error: "user does not exist" });
@@ -58,6 +60,18 @@ exports.forgetPassword = function (req, res) {
       }
     });
   });
+};
+exports.profilepicture = async (req, res) => {
+  try {
+    const users = await User.findOne(req.params.email);
+    if (!users || !users.avatar) {
+      throw new Error("image does not exist");
+    }
+    res.set("Content-Type", "image/jpg");
+    res.send(users.avatar);
+  } catch (e) {
+    res.status(500).send(e);
+  }
 };
 // exports.signup = (req, res) => {
 //   console.log(req.body);

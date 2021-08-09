@@ -9,6 +9,8 @@ const { activateAccount } = require("../controllers/auth");
 const { signup } = require("../controllers/auth");
 
 const { forgetPassword } = require("../controllers/auth");
+
+const {profilepicture } = require("../controllers/auth");
 const upload = multer ({
  
   limits: {
@@ -26,19 +28,7 @@ router.post("/visitor/signup",upload.single('avatar'), signup);
 //multer
 
 
-router.post("/visitor/profile" , upload.single('avatar') , (req , res) => {
-  const avatar = req.file.buffer
-  let newUser = new User({
-     
-  })
-  newUser.save((err, sucess) => {
-    if (err) {
-      return res.status(400).json({ error: "error in activating account" });
-    }
-    res.json({ message: "signup successful" });
-  });
 
-});
 // router.post("/email-activate", activateAccount);
 router.put("/forgetPassword", forgetPassword);
 router.get("/visitor/allUsers", async (req, res) => {
@@ -49,5 +39,6 @@ router.get("/visitor/allUsers", async (req, res) => {
     res.status(500).send(e);
   }
 });
+router.get("/visitor/:id/avatar", profilepicture );
 
 module.exports = router;
