@@ -23,8 +23,8 @@ const upload = multer ({
   cb (undefined , true);
   }
   })
-// router.post("/visitor/signup",upload.single('avatar'), signup);
-router.post("/visitor/signup", signup);
+router.post("/visitor/signup",upload.single('avatar'), signup);
+
 //multer
 
 
