@@ -73,6 +73,35 @@ exports.profilepicture = async (req, res) => {
     res.status(500).send(e);
   }
 };
+
+// exports.updateProfile = function (req, res) {
+//   console.log("done1") 
+//   if(req.file){
+//     var data = {name : req.body.name,
+//     email : req.body.email,
+  
+//     avatar : req.file.buffer
+    
+//   }
+//   }else {  
+//     var data = {name : req.body.name,
+//       email : req.body.email,
+      
+//     }
+//   }
+//   var update = User.findByIdAndUpdate(req.body.id , data);
+//   update.exec(function (err , data) {
+// if (err) {
+//   throw err
+// }
+// User.exec(function (err,data){
+//   if (err) {
+//    throw err;
+//   }
+//  User.save()
+// })
+//   })
+// }
 // exports.signup = (req, res) => {
 //   console.log(req.body);
 //   const { name, username, PhoneNumber, email, dateOfBirth, password } =
