@@ -10,24 +10,22 @@ const { signup } = require("../controllers/auth");
 const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
 
-const {profilepicture } = require("../controllers/auth");
-const upload = multer ({
- 
-  limits: {
-  fileSize: 1024*1024*2
-  }, 
-  fileFilter (req , file , cb){
-  if(!file.originalname.match(/\.(jpg|png|jpeg|JPG|PNG|JPEG)$/)){
-    return cb(new Error("please upload image"))
-  }
-  cb (undefined , true);
-  }
-  })
-router.post("/visitor/signup",upload.single('avatar'), signup);
-
+const { profilepicture } = require("../controllers/auth");
 //multer
+const upload = multer({
+  limits: {
+    fileSize: 1024 * 1024 * 2,
+  },
 
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|png|jpeg|JPG|PNG|JPEG)$/)) {
+      return cb(new Error("please upload image"));
+    }
 
+    cb(undefined, true);
+  },
+});
+router.post("/visitor/signup", upload.single("avatar"), signup);
 
 // router.post("/email-activate", activateAccount);
 router.put("/forgetPassword", forgetPassword);
@@ -40,7 +38,12 @@ router.get("/visitor/allUsers", async (req, res) => {
   }
 });
 
-// router.post("visitor/updateProfile" , upload.single('avatar') , updateProfile);
-router.get("/visitor/:id/avatar", profilepicture );
+router.post(
+  "/visitor/updateProfile",
+  upload.single("avatar"),
+  updateProfile
+);
+
+router.get("/visitor/:id/avatar", profilepicture);
 
 module.exports = router;

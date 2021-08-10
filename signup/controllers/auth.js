@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
-  console.log(req.body);
+  
   const { name, username, PhoneNumber, email, dateOfBirth, password } =
     req.body;
   const avatar =  req.file.buffer;
@@ -74,34 +74,39 @@ exports.profilepicture = async (req, res) => {
   }
 };
 
-// exports.updateProfile = function (req, res) {
-//   console.log("done1") 
-//   if(req.file){
-//     var data = {name : req.body.name,
-//     email : req.body.email,
-  
-//     avatar : req.file.buffer
-    
-//   }
-//   }else {  
-//     var data = {name : req.body.name,
-//       email : req.body.email,
-      
-//     }
-//   }
-//   var update = User.findByIdAndUpdate(req.body.id , data);
-//   update.exec(function (err , data) {
-// if (err) {
-//   throw err
-// }
-// User.exec(function (err,data){
-//   if (err) {
-//    throw err;
-//   }
-//  User.save()
-// })
-//   })
-// }
+exports.updateProfile =  async (req, res) => {
+  console.log("done1");
+  if (req.file) {
+    var data = {
+      name: req.body.name,
+      email: req.body.email,
+
+      avatar: req.file.buffer,
+    };
+    //console.log(data);
+  } else {
+    var data = { name: req.body.name, email: req.body.email };
+    // console.log(data);
+  }
+  var user = User.findOne({ email: req.body.email }, function (err, user) {
+    if (user || err) {
+      return res.send("email already exist");
+    }
+    var update = User.findByIdAndUpdate(
+      req.body.id,
+      data,
+      function (err, data) {
+        if (err) {
+          console.log(err.mesage);
+        } else {
+          res.send("done updated user");
+          console.log("Updated User : ", data);
+        }
+      }
+    );
+  });
+
+}
 // exports.signup = (req, res) => {
 //   console.log(req.body);
 //   const { name, username, PhoneNumber, email, dateOfBirth, password } =
