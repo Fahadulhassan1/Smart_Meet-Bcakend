@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const validator = require("validator");
-const userSchema = new mongoose.Schema({
+const employeeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -48,8 +48,10 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
   type : Buffer,
+  required : true,
+  },
   
-  }
 }, {timestamps: true} );
-const User =  mongoose.model('User' , userSchema)
-module.exports =User   ;
+
+const Employee = mongoose.model('Employee' ,employeeSchema );
+module.exports = Employee  ;

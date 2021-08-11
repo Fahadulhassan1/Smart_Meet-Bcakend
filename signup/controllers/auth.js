@@ -78,7 +78,7 @@ exports.updateProfile = async (req, res) => {
   if (req.file) {
     var data = {
       name: req.body.name,
-
+      
       avatar: req.file.buffer,
     };
     //console.log(data);
