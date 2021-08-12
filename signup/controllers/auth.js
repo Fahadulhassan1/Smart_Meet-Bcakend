@@ -33,6 +33,21 @@ exports.signup = async (req, res) => {
   });
 };
 
+exports.signin = async (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email }).exec((err, user) => {
+
+    if (user) {
+      if (user.email == email && user.password == password) {
+        return res.status(200).json({ success: "user signedin" });
+      }
+      return res.status(400).json("wrong email or password");
+    }
+   return  res.status(400).json( "user does not exist" );
+    
+  });
+};
+
 exports.forgetPassword = function (req, res) {
   const { email, newpass } = req.body;
   console.log("done");
@@ -78,7 +93,7 @@ exports.updateProfile = async (req, res) => {
   if (req.file) {
     var data = {
       name: req.body.name,
-      
+
       avatar: req.file.buffer,
     };
     //console.log(data);
@@ -86,20 +101,15 @@ exports.updateProfile = async (req, res) => {
     var data = { name: req.body.name };
     // console.log(data);
   }
-  
-    var update = User.findByIdAndUpdate(
-      req.body.id,
-      data,
-      function (err, data) {
-        if (err) {
-          console.log(err.mesage);
-        } else {
-          res.send("done updated user");
-          console.log("Updated User : ", data);
-        }
-      }
-    );
-  
+
+  var update = User.findByIdAndUpdate(req.body.id, data, function (err, data) {
+    if (err) {
+      console.log(err.mesage);
+    } else {
+      res.send("done updated user");
+      console.log("Updated User : ", data);
+    }
+  });
 };
 // exports.signup = (req, res) => {
 //   console.log(req.body);

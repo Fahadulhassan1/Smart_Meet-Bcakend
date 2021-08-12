@@ -9,6 +9,7 @@ const { activateAccount } = require("../controllers/auth");
 const { signup } = require("../controllers/auth");
 const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
+const {signin} = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
 //multer
@@ -26,6 +27,8 @@ const upload = multer({
   },
 });
 router.post("/visitor/signup", upload.single("avatar"), signup);
+
+router.post("/visitor/signin", signin);
 
 // router.post("/email-activate", activateAccount);
 router.put("/forgetPassword", forgetPassword);

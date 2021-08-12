@@ -50,6 +50,11 @@ const employeeSchema = new mongoose.Schema({
   type : Buffer,
   required : true,
   },
+  authorize: {
+    type : Boolean, 
+    default : false,
+  
+  }
   
 }, {timestamps: true} );
 

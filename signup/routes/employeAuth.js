@@ -7,6 +7,7 @@ const router = express.Router();
 //import controllers
 const { activateAccount } = require("../controllers/EmployeeAuth");
 const { signup } = require("../controllers/EmployeeAuth");
+const {signin } = require("../controllers/EmployeeAuth")
 const { updateProfile } = require("../controllers/EmployeeAuth");
 const { forgetPassword } = require("../controllers/EmployeeAuth");
 
@@ -26,7 +27,7 @@ const upload = multer({
   },
 });
 router.post("/employee/signup", upload.single("avatar"), signup);
-
+router.post("/employee/signin", signin);
 // router.post("/email-activate", activateAccount);
 router.put("/forgetPassword", forgetPassword);
 router.get("/employee/allUsers", async (req, res) => {
