@@ -11,6 +11,7 @@ const { signup } = require("../controllers/auth");
 const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
 const { signin } = require("../controllers/auth");
+const {imageView} = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
 //multer
@@ -49,7 +50,7 @@ router.post(
   (req, res, next) => {
     var avatar = req.file.buffer;
     let newUser = new Upload({
-      avatar
+      avatar,
     });
     console.log(newUser);
     newUser.save((err, sucess) => {
@@ -60,6 +61,14 @@ router.post(
     });
   }
 );
+router.get("/visitor/uploadProfile" , async (req , res )=> {
+
+const users = await Upload.find({})
+
+res.send(users);
+
+console.log(users)
+})
 
 router.get("/visitor/:id/avatar", profilepicture);
 

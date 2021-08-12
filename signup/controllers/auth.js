@@ -110,6 +110,8 @@ exports.updateProfile = async (req, res) => {
       console.log("Updated User : ", data);
     }
   });
+
+ 
 };
 // exports.signup = (req, res) => {
 //   console.log(req.body);
