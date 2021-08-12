@@ -1,4 +1,5 @@
 const express = require("express");
+const Upload = require("../model/user");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
@@ -42,6 +43,23 @@ router.get("/visitor/allUsers", async (req, res) => {
 });
 
 router.post("/visitor/updateProfile", upload.single("avatar"), updateProfile);
+router.post(
+  "/visitor/uploadProfile",
+  upload.single("avatar"),
+  (req, res, next) => {
+    var avatar = req.file.buffer;
+    let newUser = new Upload({
+      avatar
+    });
+    console.log(newUser);
+    newUser.save((err, sucess) => {
+      if (err) {
+        return res.status(400).json({ error: "error in activating account" });
+      }
+      res.json({ message: "signup successful" });
+    });
+  }
+);
 
 router.get("/visitor/:id/avatar", profilepicture);
 
