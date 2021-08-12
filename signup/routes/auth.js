@@ -9,7 +9,7 @@ const { activateAccount } = require("../controllers/auth");
 const { signup } = require("../controllers/auth");
 const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
-const {signin} = require("../controllers/auth");
+const { signin } = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
 //multer
@@ -41,11 +41,7 @@ router.get("/visitor/allUsers", async (req, res) => {
   }
 });
 
-router.post(
-  "/visitor/updateProfile",
-  upload.single("avatar"),
-  updateProfile
-);
+router.post("/visitor/updateProfile", upload.single("avatar"), updateProfile);
 
 router.get("/visitor/:id/avatar", profilepicture);
 

@@ -7,7 +7,7 @@ const router = express.Router();
 //import controllers
 const { activateAccount } = require("../controllers/EmployeeAuth");
 const { signup } = require("../controllers/EmployeeAuth");
-const {signin } = require("../controllers/EmployeeAuth")
+const { signin } = require("../controllers/EmployeeAuth");
 const { updateProfile } = require("../controllers/EmployeeAuth");
 const { forgetPassword } = require("../controllers/EmployeeAuth");
 
@@ -39,11 +39,7 @@ router.get("/employee/allUsers", async (req, res) => {
   }
 });
 
-router.post(
-  "/employee/updateProfile",
-  upload.single("avatar"),
-  updateProfile
-);
+router.post("/employee/updateProfile", upload.single("avatar"), updateProfile);
 
 router.get("/employee/:id/avatar", profilepicture);
 

@@ -10,12 +10,12 @@ exports.signup = async (req, res) => {
 
   Employee.findOne({ email }).exec((err, employee) => {
     if (employee) {
-     // console.log(employee.email + " is already exists");
+      // console.log(employee.email + " is already exists");
       return res
         .status(400)
         .json({ error: "user with this email id is already exists" });
     }
-    
+
     let newUser = new Employee({
       name,
       username,
@@ -37,19 +37,22 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
   Employee.findOne({ email }).exec((err, user) => {
-    
     if (user) {
-      if(! user.authorize){
-        return res.status(403).json({ message: "You do not have permission to login , Admin will authorize you soon" }); 
-        }else{
-      if (user.email == email && user.password == password) {
-        return res.status(200).json({ success: "user signedin" });
+      if (!user.authorize) {
+        return res
+          .status(403)
+          .json({
+            message:
+              "You do not have permission to login , Admin will authorize you soon",
+          });
+      } else {
+        if (user.email == email && user.password == password) {
+          return res.status(200).json({ success: "user signedin" });
+        }
+        return res.status(400).json("wrong email or password");
       }
-      return res.status(400).json("wrong email or password");
     }
-  }
-   return  res.status(400).json( "user does not exist" );
-    
+    return res.status(400).json("user does not exist");
   });
 };
 exports.forgetPassword = function (req, res) {
@@ -97,7 +100,7 @@ exports.updateProfile = async (req, res) => {
   if (req.file) {
     var data = {
       name: req.body.name,
-      
+
       avatar: req.file.buffer,
     };
     //console.log(data);
@@ -105,18 +108,17 @@ exports.updateProfile = async (req, res) => {
     var data = { name: req.body.name };
     // console.log(data);
   }
-  
-    var update = Employee.findByIdAndUpdate(
-      req.body.id,
-      data,
-      function (err, data) {
-        if (err) {
-          console.log(err.mesage);
-        } else {
-          res.send("done updated Employee");
-          console.log("Updated Employee : ", data);
-        }
+
+  var update = Employee.findByIdAndUpdate(
+    req.body.id,
+    data,
+    function (err, data) {
+      if (err) {
+        console.log(err.mesage);
+      } else {
+        res.send("done updated Employee");
+        console.log("Updated Employee : ", data);
       }
-    );
-  
+    }
+  );
 };
