@@ -41,9 +41,9 @@ exports.signin = async (req, res) => {
       if (user.email == email && user.password == password) {
         return res.status(200).json({ success: "user signedin" });
       }
-      return res.status(400).json("wrong email or password");
+      return res.status(400).json({error : "wrong email or password"});
     }
-   return  res.status(400).json( "user does not exist" );
+   return  res.status(400).json({error:  "user does not exist"} );
     
   });
 };
