@@ -55,12 +55,12 @@ const User =  mongoose.model('User' , userSchema)
 module.exports =User   ;
 
 
-const uploadschema= new mongoose.Schema({
-  avatar: {
-    type : Buffer,
+// const uploadschema= new mongoose.Schema({
+//   avatar: {
+//     type : Buffer,
     
-    }
-  })
+//     }
+//   })
 
-  const Upload =  mongoose.model('Upload' , uploadschema)
-module.exports =Upload   ;
+//   const Upload =  mongoose.model('Upload' , uploadschema)
+// module.exports =Upload   ;

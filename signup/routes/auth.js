@@ -44,31 +44,31 @@ router.get("/visitor/allUsers", async (req, res) => {
 });
 
 router.post("/visitor/updateProfile", upload.single("avatar"), updateProfile);
-router.post(
-  "/visitor/uploadProfile",
-  upload.single("avatar"),
-  (req, res, next) => {
-    var avatar = req.file.buffer;
-    let newUser = new Upload({
-      avatar,
-    });
-    console.log(newUser);
-    newUser.save((err, sucess) => {
-      if (err) {
-        return res.status(400).json({ error: "error in activating account" });
-      }
-      res.json({ message: "signup successful" });
-    });
-  }
-);
-router.get("/visitor/uploadProfile" , async (req , res )=> {
+// router.post(
+//   "/visitor/uploadProfile",
+//   upload.single("avatar"),
+//   (req, res, next) => {
+//     var avatar = req.file.buffer;
+//     let newUser = new Upload({
+//       avatar,
+//     });
+//     console.log(newUser);
+//     newUser.save((err, sucess) => {
+//       if (err) {
+//         return res.status(400).json({ error: "error in activating account" });
+//       }
+//       res.json({ message: "signup successful" });
+//     });
+//   }
+// );
+// router.get("/visitor/uploadProfile" , async (req , res )=> {
 
-const users = await Upload.find({})
+// const users = await Upload.find({})
 
-res.send(users);
+// res.send(users);
 
-console.log(users)
-})
+// console.log(users)
+// })
 
 router.get("/visitor/:id/avatar", profilepicture);
 
