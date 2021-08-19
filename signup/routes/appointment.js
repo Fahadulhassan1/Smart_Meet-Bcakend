@@ -14,7 +14,7 @@ const {cancelAppointment} = require("../controllers/appointment");
 router.post("/visitor/appointment",newAppointmentRequest )
 router.get("/visitor/appointment",getAllAppointments )
 router.get("/visitor/:UserId/pendingappointment",pendingAppointments) 
-router.delete("/visitor/:id", cancelAppointment) 
+router.delete("/visitor/cancelAppointment/:id", cancelAppointment) 
 
 
 module.exports = router;
