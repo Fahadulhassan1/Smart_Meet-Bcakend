@@ -69,10 +69,18 @@ exports.pendingAppointments = async (req, res, next) => {
 };
 exports.cancelAppointment = async(req, res)=> {
   console.log("cancel appointment");
-  var id = new ObjectId(req.params.id);
+  
+try {
+  // var id = new ObjectId(req.params.id);
 
- await Appointment.deleteOne({_id : id});
- res.send("deleted");
-
+ const appointment = await Appointment.findByIdAndDelete(req.params.id);
+ 
+ if(!appointment) {
+   return res.send({error : "no appointment found"});
+ }
+ return res.send({message : "appointment successfully deleted"});
+} catch (err) {
+ return  res.send({error : err.message});
+}
 
 }
