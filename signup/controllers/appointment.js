@@ -59,7 +59,8 @@ exports.pendingAppointments = async (req, res, next) => {
     if (pendingAppointments.length == 0) {
       return res.send({ message: "No pending Appointment Requests" });
     }
-    let x = pendingAppointments.filter((a)=>{if(! a.AppointmentAccepted){return res.send(a)}});
+  
+    let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
 
     
     
@@ -68,7 +69,6 @@ exports.pendingAppointments = async (req, res, next) => {
   }
 };
 exports.cancelAppointment = async(req, res)=> {
-  console.log("cancel appointment");
   
 try {
   // var id = new ObjectId(req.params.id);
@@ -83,4 +83,20 @@ try {
  return  res.send({error : err.message});
 }
 
+}
+
+exports.acceptAppointment = async (req, res)=>  {
+ 
+  try {
+    // var id = new ObjectId(req.params.id);
+  
+   const appointment = await Appointment.findByIdAndUpdate (req.params.id , appointment.AppointmentAccepted == true);
+   
+   if(!appointment) {
+     return res.send({error : "no appointment found"});
+   }
+   return res.send({message : "appointment successfully accepted"});
+  } catch (err) {
+   return  res.send({error : err.message});
+  }
 }

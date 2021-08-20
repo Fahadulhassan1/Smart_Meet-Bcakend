@@ -11,10 +11,12 @@ const router = express.Router();
  const {getAllAppointments} = require("../controllers/appointment");
 const {pendingAppointments} = require("../controllers/appointment");
 const {cancelAppointment} = require("../controllers/appointment");
+
+const {acceptAppointment} = require("../controllers/appointment");
 router.post("/visitor/appointment",newAppointmentRequest )
 router.get("/visitor/appointment",getAllAppointments )
 router.get("/visitor/:UserId/pendingappointment",pendingAppointments) 
 router.delete("/visitor/cancelAppointment/:id", cancelAppointment) 
-
+router.post("/visitor/acceptappointment/:id",acceptAppointment)
 
 module.exports = router;
