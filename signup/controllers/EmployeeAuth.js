@@ -4,9 +4,13 @@ const jwt = require("jsonwebtoken");
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
-  const { name, username, PhoneNumber, email, dateOfBirth, password } =
-    req.body;
-  const avatar = req.file.buffer;
+  if (req.file) {
+    var { name, username, PhoneNumber, email, dateOfBirth, password } =
+      req.body;
+    var avatar = req.file.buffer;
+  } else {
+    return res.send("error may be");
+  }
 
   Employee.findOne({ email }).exec((err, employee) => {
     if (employee) {
@@ -39,12 +43,10 @@ exports.signin = async (req, res) => {
   Employee.findOne({ email }).exec((err, user) => {
     if (user) {
       if (!user.authorize) {
-        return res
-          .status(403)
-          .json({
-            message:
-              "You do not have permission to login , Admin will authorize you soon",
-          });
+        return res.status(403).json({
+          message:
+            "You do not have permission to login , Admin will authorize you soon",
+        });
       } else {
         if (user.email == email && user.password == password) {
           return res.status(200).json({ success: "user signedin" });
