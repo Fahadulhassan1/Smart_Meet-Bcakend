@@ -60,7 +60,26 @@ exports.pendingAppointments = async (req, res, next) => {
       return res.send({ message: "No pending Appointment Requests" });
     }
   
-    let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+    // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+    const result = pendingAppointments
+    const dataToSend = []
+    result.forEach(data => {
+        if (!data.AppointmentAccepted) {
+            dataToSend.push({
+                AppointmentAccepted: data.AppointmentAccepted,
+                _id: data._id,
+                employeeId : data.employeeId, 
+                VisitorId : data.VisitorId,
+                name: data.name,
+                CompanyName: data.CompanyName,
+                Date: data.Date,
+                Timeslot : data.Timeslot,
+                Message: data.Message
+                
+            })
+        }
+    });
+    res.send(dataToSend);
 
     
     

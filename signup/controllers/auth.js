@@ -4,13 +4,11 @@ const jwt = require("jsonwebtoken");
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
-  if (req.file) {
+  
     var { name, username, PhoneNumber, email, dateOfBirth, password } =
       req.body;
     var avatar = req.file.buffer;
-  } else {
-    return res.status(399).send({error : "please upload image"});
-  }
+  
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res
