@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
       req.body;
     var avatar = req.file.buffer;
   } else {
-    return res.send({error : "please upload image"});
+    return res.status(400).send({error : "please upload image"});
   }
   User.findOne({ email }).exec((err, user) => {
     if (user) {
