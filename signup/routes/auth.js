@@ -12,6 +12,7 @@ const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
 const { signin } = require("../controllers/auth");
 const {imageView} = require("../controllers/auth");
+const {viewProfile} = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
 //multer
@@ -73,5 +74,7 @@ console.log(users)
 })
 
 router.get("/visitor/:id/avatar", profilepicture);
+
+router.get("/visitor/:email/viewProfile", viewProfile);  
 
 module.exports = router;

@@ -104,18 +104,63 @@ try {
 
 }
 
-exports.acceptAppointment = async (req, res)=>  {
- 
+exports.receivedAppointment = async (req, res) =>{ 
   try {
-    // var id = new ObjectId(req.params.id);
+    const user = new ObjectId(req.params.employeeId);
+    console.log(user);
+    const pending_Appointments_request = await Appointment.find({ employeeId: user });
+    
+    if (pending_Appointments_request.length == 0) {
+      return res.send({ message: "No pending Appointment Requests" });
+    }
   
-   const appointment = await Appointment.findByIdAndUpdate (req.params.id , appointment.AppointmentAccepted == true);
-   
-   if(!appointment) {
-     return res.send({error : "no appointment found"});
-   }
-   return res.send({message : "appointment successfully accepted"});
-  } catch (err) {
-   return  res.send({error : err.message});
+    // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+    const result = pending_Appointments_request
+    const dataToSend = []
+    result.forEach(data => {
+        if (!data.AppointmentAccepted) {
+            dataToSend.push({
+                AppointmentAccepted: data.AppointmentAccepted,
+                _id: data._id,
+                employeeId : data.employeeId, 
+                VisitorId : data.VisitorId,
+                name: data.name,
+                CompanyName: data.CompanyName,
+                Date: data.Date,
+                Timeslot : data.Timeslot,
+                Message: data.Message
+                
+            })
+        }
+    });
+    res.send(dataToSend);
+
+    
+    
+  } catch (e) {
+    return res.send({error : "error exists"});
   }
+}
+exports.acceptAppointment = async (req, res)=>  {
+  const _id = req.params.id;
+  console.log(_id);
+ var accept  = true ;
+  await Appointment.findOne({ _id }, (err, user) => {
+    if (err || !user) {
+      return res.send({ error: "no appointment found" });
+    }
+    const obj = {
+      AppointmentAccepted: accept,
+    };
+    user = _.extend(user, obj);
+    user.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot accept currently" });
+      } else {
+        return res
+          .status(200)
+          .send({ message: "appointment request accepted" });
+      }
+    });
+  });
 }

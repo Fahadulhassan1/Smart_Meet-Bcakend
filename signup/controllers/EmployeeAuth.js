@@ -124,3 +124,14 @@ exports.updateProfile = async (req, res) => {
     }
   );
 };
+
+exports.viewProfile = async (req, res, next)=> {
+  console.log(req.params.email);
+  var email = req.params.email
+ await  Employee.findOne({ email }, (err, user) => {
+  if(! user) {
+    return res.send({error : 'Employee not found'});
+}
+return res.send({user});
+ })
+}
