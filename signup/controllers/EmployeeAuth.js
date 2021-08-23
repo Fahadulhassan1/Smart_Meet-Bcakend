@@ -125,13 +125,25 @@ exports.updateProfile = async (req, res) => {
   );
 };
 
-exports.viewProfile = async (req, res, next)=> {
+exports.viewProfile = async (req, res, next) => {
   console.log(req.params.email);
-  var email = req.params.email
- await  Employee.findOne({ email }, (err, user) => {
-  if(! user) {
-    return res.send({error : 'Employee not found'});
-}
-return res.send({user});
- })
+  var email = req.params.email;
+  await Employee.findOne({ email }, (err, user) => {
+    if (!user) {
+      return res.send({ error: "Employee not found" });
+    }
+    return res.send({ user });
+  });
+};
+
+exports.verifyEmail = async (req, res) => {
+  const email = req.params.email ;
+ await  Employee.findOne({ email }, (err, user) => { 
+    if(user ) {
+       return res.status(200).send({ message: "Email exists " });
+    
+    }
+    return res.status(404).send({ message: "No email found" });
+  
+  })
 }

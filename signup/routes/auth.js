@@ -11,10 +11,11 @@ const { signup } = require("../controllers/auth");
 const { updateProfile } = require("../controllers/auth");
 const { forgetPassword } = require("../controllers/auth");
 const { signin } = require("../controllers/auth");
-const {imageView} = require("../controllers/auth");
-const {viewProfile} = require("../controllers/auth");
+const { imageView } = require("../controllers/auth");
+const { viewProfile } = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
+const {verifyEmail } = require("../controllers/auth");
 //multer
 const upload = multer({
   limits: {
@@ -63,18 +64,16 @@ router.post(
   }
 );
 
+router.get("/visitor/uploadProfile", async (req, res) => {
+  const users = await Upload.find({});
 
-router.get("/visitor/uploadProfile" , async (req , res )=> {
+  res.send(users);
 
-const users = await Upload.find({})
-
-res.send(users);
-
-console.log(users)
-})
+  console.log(users);
+});
 
 router.get("/visitor/:id/avatar", profilepicture);
 
-router.get("/visitor/:email/viewProfile", viewProfile);  
-
+router.get("/visitor/:email/viewProfile", viewProfile);
+router.get ("/visitor/verifyemail/:email", verifyEmail);
 module.exports = router;

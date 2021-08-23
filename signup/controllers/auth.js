@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
       req.body;
     var avatar = req.file.buffer;
   } else {
-    return res.status(399).send({error : "please upload image"});
+    return res.status(400).send({ error: "please upload image" });
   }
   User.findOne({ email }).exec((err, user) => {
     if (user) {
@@ -39,15 +39,13 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }).exec((err, user) => {
-
     if (user) {
       if (user.email == email && user.password == password) {
         return res.status(200).json({ success: "user signedin" });
       }
-      return res.status(400).json({error : "wrong email or password"});
+      return res.status(400).json({ error: "wrong email or password" });
     }
-   return  res.status(400).json({error:  "user does not exist"} );
-    
+    return res.status(400).json({ error: "user does not exist" });
   });
 };
 
@@ -113,19 +111,32 @@ exports.updateProfile = async (req, res) => {
       console.log("Updated User : ", data);
     }
   });
-
- 
 };
 
-exports.viewProfile = async (req, res, next)=> {
-  console.log(req.params.email);
-  var email = req.params.email
- await  User.findOne({ email }, (err, user) => {
-  if(! user) {
-    return res.send({error : 'User not found'});
-}
-return res.send({user});
- })
+exports.viewProfile = async (req, res, next) => {
+  var email = req.params.email;
+  if (email == undefined || email == null || email.length == 0) {
+    return res.send("incoorect email");
+  }
+
+  await User.findOne({ email }, (err, user) => {
+    if (!user) {
+      return res.send({ error: "User not found" });
+    }
+    return res.send({ user });
+  });
+};
+
+exports.verifyEmail = async (req, res) => {
+  const email = req.params.email ;
+ await  User.findOne({ email }, (err, user) => { 
+    if(user ) {
+       return res.status(200).send({ message: "Email exists " });
+    
+    }
+    return res.status(404).send({ message: "No email found" });
+  
+  })
 }
 
 

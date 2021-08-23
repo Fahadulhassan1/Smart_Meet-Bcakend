@@ -13,7 +13,8 @@ const { forgetPassword } = require("../controllers/EmployeeAuth");
 
 const { profilepicture } = require("../controllers/EmployeeAuth");
 
-const {viewProfile} = require("../controllers/EmployeeAuth")
+const { viewProfile } = require("../controllers/EmployeeAuth");
+const {verifyEmail} = require("../controllers/EmployeeAuth");
 //multer
 const upload = multer({
   limits: {
@@ -45,5 +46,7 @@ router.post("/employee/updateProfile", upload.single("avatar"), updateProfile);
 
 router.get("/employee/:id/avatar", profilepicture);
 
-router.get("/employee/:email/viewProfile", viewProfile);  
+router.get("/employee/:email/viewProfile", viewProfile);
+
+router.get ("/employee/verifyemail/:email", verifyEmail);
 module.exports = router;
