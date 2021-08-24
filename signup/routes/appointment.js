@@ -12,8 +12,8 @@ const router = express.Router();
 const {pendingAppointments} = require("../controllers/appointment");
 const {cancelAppointment} = require("../controllers/appointment");
 const {receivedAppointment} = require("../controllers/appointment");
-const {acceptAppointment} = require("../controllers/appointment");
-
+const {acceptAppointments} = require("../controllers/appointment");
+const {acceptedAppointments , qrcode} = require("../controllers/appointment");
 
 
 router.post("/visitor/appointment",newAppointmentRequest )
@@ -24,6 +24,8 @@ router.delete("/visitor/cancelAppointment/:id", cancelAppointment)
 router.get("/employee/:employeeId/pendingappointmentrequests",receivedAppointment) 
 
 
-router.post("/employee/acceptappointment/:id",acceptAppointment)
+router.post("/employee/acceptappointment/:id",acceptAppointments)
+router.get("/visitor/acceptedrequest/:VisitorId" , acceptedAppointments) ;
+router.get("/visitor/acceptedrequest/qrcode/:id",qrcode)
 
 module.exports = router;

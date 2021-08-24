@@ -2,7 +2,9 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 
 var nodemailer = require("nodemailer");
+const qrcode = require("qrcode");
 const _ = require("lodash");
+
 exports.signup = async (req, res) => {
   if (req.file) {
     var { name, username, PhoneNumber, email, dateOfBirth, password } =
@@ -129,6 +131,7 @@ exports.viewProfile = async (req, res, next) => {
 
 exports.verifyEmail = async (req, res) => {
   const email = req.params.email ;
+  try {
  await  User.findOne({ email }, (err, user) => { 
     if(user ) {
        return res.status(200).send({ message: "Email exists " });
@@ -137,7 +140,13 @@ exports.verifyEmail = async (req, res) => {
     return res.status(404).send({ message: "No email found" });
   
   })
+}catch (e) {
+  return res.status(500).send({ message: e.message });
 }
+}
+
+
+
 
 
 // exports.signup = (req, res) => {

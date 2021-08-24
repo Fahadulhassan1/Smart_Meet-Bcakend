@@ -138,6 +138,7 @@ exports.viewProfile = async (req, res, next) => {
 
 exports.verifyEmail = async (req, res) => {
   const email = req.params.email ;
+  try{
  await  Employee.findOne({ email }, (err, user) => { 
     if(user ) {
        return res.status(200).send({ message: "Email exists " });
@@ -146,4 +147,5 @@ exports.verifyEmail = async (req, res) => {
     return res.status(404).send({ message: "No email found" });
   
   })
+}catch (err) { return res.status(500).send({ message: err.message }); }
 }
