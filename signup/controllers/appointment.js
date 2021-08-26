@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
+const { rawListeners } = require("../model/user");
 
 // exports.getslots = async (req , res) => {
 //     const {employeeId , visitorId  , date } = req.body;
@@ -24,30 +25,38 @@ exports.newAppointmentRequest = async (req, res, next) => {
   console.log("done");
   if (req.file) {
     var { employeeId, VisitorId, Name, CompanyName, Date, Timeslot, Message } =
-    req.body;
+      req.body;
     var avatar = req.file.buffer;
   } else {
     return res.status(400).send({ error: "please upload image" });
   }
 
- 
+  const appointments = await Appointment.find({
+    VisitorId: VisitorId,
+    Date: Date,
+    Timeslot: Timeslot,
+  });
 
-  let AppointmentRequest = new Appointment({
-    employeeId,
-    VisitorId,
-    Name,
-    CompanyName,
-    Date,
-    Timeslot,
-    Message,
-    avatar
-  });
-  AppointmentRequest.save((err, sucess) => {
-    if (err) {
-      return res.status(400).json({ error: "error in sending request" });
-    }
-    res.json({ message: "appointment request sent successfully" });
-  });
+  if (appointments.length > 0) {
+    return res.send({ error: "you already booked Appoitment on this slot" });
+  } else {
+    let AppointmentRequest = new Appointment({
+      employeeId,
+      VisitorId,
+      Name,
+      CompanyName,
+      Date,
+      Timeslot,
+      Message,
+      avatar,
+    });
+    AppointmentRequest.save((err, sucess) => {
+      if (err) {
+        return res.status(400).json({ error: "error in sending request" });
+      }
+      return res.json({ message: "appointment request sent successfully" });
+    });
+  }
 };
 
 exports.getAllAppointments = async (req, res, next) => {
@@ -173,40 +182,36 @@ exports.acceptedAppointments = async function (req, res) {
     return res.send({ message: "No accepted Appointment Requests" });
   }
   const result = accepted_requests;
-    const dataToSend = [];
-    result.forEach((data) => {
-      if (data.AppointmentAccepted) {
-        dataToSend.push({
-          AppointmentAccepted: data.AppointmentAccepted,
-          _id: data._id,
-          employeeId: data.employeeId,
-          VisitorId: data.VisitorId,
-          name: data.name,
-          CompanyName: data.CompanyName,
-          Date: data.Date,
-          Timeslot: data.Timeslot,
-          Message: data.Message,
-        });
-      }
-    });
-    res.send(dataToSend);
-  
+  const dataToSend = [];
+  result.forEach((data) => {
+    if (data.AppointmentAccepted) {
+      dataToSend.push({
+        AppointmentAccepted: data.AppointmentAccepted,
+        _id: data._id,
+        employeeId: data.employeeId,
+        VisitorId: data.VisitorId,
+        name: data.name,
+        CompanyName: data.CompanyName,
+        Date: data.Date,
+        Timeslot: data.Timeslot,
+        Message: data.Message,
+      });
+    }
+  });
+  res.send(dataToSend);
 };
 
-exports.qrcode =  (req, res) => {
+exports.qrcode = (req, res) => {
   const appointmentId = req.params.id;
   console.log(appointmentId);
-  try { 
+  try {
     qr.toDataURL(appointmentId.toString(), (err, src) => {
       if (err) return res.send("Error occured");
-    
-      // Let us return the QR code image as our response and set it to be the source used in the webpage
-      return res.send( src );
-  });
-    
 
-  }catch (err) {
+      // Let us return the QR code image as our response and set it to be the source used in the webpage
+      return res.send(src);
+    });
+  } catch (err) {
     return res.send(err.message);
   }
-
-}
+};
