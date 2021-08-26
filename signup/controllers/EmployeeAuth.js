@@ -5,7 +5,7 @@ var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
   if (req.file) {
-    var { name, username, PhoneNumber, email, dateOfBirth, password } =
+    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password } =
       req.body;
     var avatar = req.file.buffer;
   } else {
@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
     }
 
     let newUser = new Employee({
-      name,
+      firstName, lastName,
       username,
       PhoneNumber,
       email,
@@ -101,13 +101,15 @@ exports.updateProfile = async (req, res) => {
   console.log("done1");
   if (req.file) {
     var data = {
-      name: req.body.name,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
 
       avatar: req.file.buffer,
     };
     //console.log(data);
   } else {
-    var data = { name: req.body.name };
+    var data = { firstName: req.body.firstName,
+      lastName: req.body.lastName, };
     // console.log(data);
   }
 

@@ -22,9 +22,16 @@ const _ = require("lodash");
 exports.newAppointmentRequest = async (req, res, next) => {
   // const ts = ['10:00-10:30','10:30-11:00','11:00-11:30','11:30-12:00','12:00-12:30','12:30-13:00','13:00-13:30','13:30-14:00','14:00-14:30','14:30-15:00','15:00-15:30','15:30-16:00'];
   console.log("done");
-  const { employeeId, VisitorId, Name, CompanyName, Date, Timeslot, Message } =
+  if (req.file) {
+    var { employeeId, VisitorId, Name, CompanyName, Date, Timeslot, Message } =
     req.body;
-  console.log(employeeId);
+    var avatar = req.file.buffer;
+  } else {
+    return res.status(400).send({ error: "please upload image" });
+  }
+
+ 
+
   let AppointmentRequest = new Appointment({
     employeeId,
     VisitorId,
@@ -33,6 +40,7 @@ exports.newAppointmentRequest = async (req, res, next) => {
     Date,
     Timeslot,
     Message,
+    avatar
   });
   AppointmentRequest.save((err, sucess) => {
     if (err) {

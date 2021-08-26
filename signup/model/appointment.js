@@ -20,9 +20,11 @@ const appointmentSchema = new mongoose.Schema(
     },
     Date: {
       type: Date,
+      required: true,
     },
     Timeslot: {
       type: String,
+      required: true,
     },
     Message: {
       type: String,
@@ -30,6 +32,10 @@ const appointmentSchema = new mongoose.Schema(
     AppointmentAccepted: {
       type: Boolean,
       default: false,
+    } , 
+    avatar : { 
+      type : Buffer, 
+   
     }
   },
   { timestamps: true }

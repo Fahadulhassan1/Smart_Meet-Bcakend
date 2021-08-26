@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const validator = require("validator");
 const employeeSchema = new mongoose.Schema({
-  name: {
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  lastName: {
     type: String,
     required: true,
     trim: true,

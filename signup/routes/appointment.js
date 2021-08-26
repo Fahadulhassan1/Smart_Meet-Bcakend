@@ -14,9 +14,21 @@ const {cancelAppointment} = require("../controllers/appointment");
 const {receivedAppointment} = require("../controllers/appointment");
 const {acceptAppointments} = require("../controllers/appointment");
 const {acceptedAppointments , qrcode} = require("../controllers/appointment");
+const upload = multer({
+    limits: {
+      fileSize: 1024 * 1024 * 2,
+    },
+  
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|png|jpeg|JPG|PNG|JPEG)$/)) {
+        return cb(new Error("please upload image"));
+      }
+  
+      cb(undefined, true);
+    },
+  });
 
-
-router.post("/visitor/appointment",newAppointmentRequest )
+router.post("/visitor/appointment",upload.single("avatar"),newAppointmentRequest )
 router.get("/visitor/appointment",getAllAppointments )
 router.get("/visitor/:UserId/pendingappointment",pendingAppointments) 
 router.delete("/visitor/cancelAppointment/:id", cancelAppointment) 
