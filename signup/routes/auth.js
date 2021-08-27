@@ -30,7 +30,7 @@ const upload = multer({
     cb(undefined, true);
   },
 });
-router.post("/visitor/Visitorsignup", upload.single("avatar"), signup);
+router.post("/visitor/Visitorsignup",  signup);
 
 router.post("/visitor/signin", signin);
 

@@ -38,7 +38,7 @@ exports.newAppointmentRequest = async (req, res, next) => {
   });
 
   if (appointments.length > 0) {
-    return res.send({ error: "you already booked Appoitment on this slot" });
+    return res.send({ error: "you already booked Appointment on this time slot" });
   } else {
     let AppointmentRequest = new Appointment({
       employeeId,

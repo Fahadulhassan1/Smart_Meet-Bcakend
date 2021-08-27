@@ -6,13 +6,11 @@ const qrcode = require("qrcode");
 const _ = require("lodash");
 
 exports.signup = async (req, res) => {
-  if (req.file) {
-    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password } =
+  
+    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password, avatar } =
       req.body;
-    var avatar = req.file.buffer;
-  } else {
-    return res.status(400).send({ error: "please upload image" });
-  }
+   
+  
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res
