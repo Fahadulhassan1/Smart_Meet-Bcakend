@@ -29,7 +29,7 @@ const upload = multer({
     cb(undefined, true);
   },
 });
-router.post("/employee/signup", upload.single("avatar"), signup);
+router.post("/employee/signup",signup);
 router.post("/employee/signin", signin);
 // router.post("/email-activate", activateAccount);
 router.put("/forgetPassword", forgetPassword);
@@ -42,7 +42,7 @@ router.get("/employee/allUsers", async (req, res) => {
   }
 });
 
-router.post("/employee/updateProfile", upload.single("avatar"), updateProfile);
+router.post("/employee/updateProfile",  updateProfile);
 
 router.get("/employee/:id/avatar", profilepicture);
 

@@ -4,13 +4,10 @@ const jwt = require("jsonwebtoken");
 var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
-  if (req.file) {
-    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password } =
+  
+    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password, avatar } =
       req.body;
-    var avatar = req.file.buffer;
-  } else {
-    return res.send("error may be");
-  }
+    
 
   Employee.findOne({ email }).exec((err, employee) => {
     if (employee) {
@@ -99,19 +96,15 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log("done1");
-  if (req.file) {
+
     var data = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
 
-      avatar: req.file.buffer,
+      avatar: req.body.avatar,
     };
     //console.log(data);
-  } else {
-    var data = { firstName: req.body.firstName,
-      lastName: req.body.lastName, };
-    // console.log(data);
-  }
+  
 
   var update = Employee.findByIdAndUpdate(
     req.body.id,

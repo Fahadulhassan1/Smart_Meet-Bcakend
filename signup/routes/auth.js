@@ -45,7 +45,7 @@ router.get("/visitor/allUsers", async (req, res) => {
   }
 });
 
-router.post("/visitor/updateProfile", upload.single("avatar"), updateProfile);
+router.post("/visitor/updateProfile",  updateProfile);
 router.post(
   "/visitor/uploadProfile",
   upload.single("avatar"),

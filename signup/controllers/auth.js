@@ -30,7 +30,7 @@ exports.signup = async (req, res) => {
     console.log(newUser);
     newUser.save((err, sucess) => {
       if (err) {
-        return res.status(400).json({ error: "error in activating account" });
+        return res.status(400).json({ error: err.message});
       }
       res.json({ message: "signup successful" });
     });
@@ -92,19 +92,14 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log("done1");
-  if (req.file) {
+ 
     var data = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
 
-      avatar: req.file.buffer,
-    };
-    //console.log(data);
-  } else {
-    var data = { firstName: req.body.firstName , lastName : req.body.lastName};
-    // console.log(data);
-  }
-
+      avatar: req.body.avatar,
+   
+    }
   var update = User.findByIdAndUpdate(req.body.id, data, function (err, data) {
     if (err) {
       console.log(err.mesage);
