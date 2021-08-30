@@ -213,3 +213,18 @@ exports.qrcode = (req, res) => {
     return res.send(err.message);
   }
 };
+exports.searchEmployees =async (req, res)=> {
+ 
+
+    try {
+      var name = req.params.name;
+      var names = await Employee.find( {$or : [{ "firstName" : { $regex : new RegExp(name, "i") } } ,{ "lastName" : { $regex : new RegExp(name, "i") }} ]});
+      if(names.length >0){
+        return res.send(names );
+      }else{return res.send({message : "no host with this name"})}
+      
+    }catch(err) {
+      return res.send(err.message);
+    }
+  
+}
