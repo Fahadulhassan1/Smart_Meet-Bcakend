@@ -15,7 +15,7 @@ const { imageView } = require("../controllers/auth");
 const { viewProfile } = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
-const {verifyEmail } = require("../controllers/auth");
+const {verifyEmail , usersDataById } = require("../controllers/auth");
 //multer
 const upload = multer({
   limits: {
@@ -76,4 +76,6 @@ router.get("/visitor/:id/avatar", profilepicture);
 
 router.get("/visitor/:email/viewProfile", viewProfile);
 router.get ("/visitor/verifyemail/:email", verifyEmail);
+router.get ("/visitor/usersProfile/:id", usersDataById)
+
 module.exports = router;

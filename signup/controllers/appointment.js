@@ -23,11 +23,17 @@ const { rawListeners } = require("../model/user");
 exports.newAppointmentRequest = async (req, res, next) => {
   // const ts = ['10:00-10:30','10:30-11:00','11:00-11:30','11:30-12:00','12:00-12:30','12:30-13:00','13:00-13:30','13:30-14:00','14:00-14:30','14:30-15:00','15:00-15:30','15:30-16:00'];
   console.log("done");
- 
-    var { employeeId, VisitorId, Name, CompanyName, Date, Timeslot, Message, avatar } =
-      req.body;
-    
-  
+
+  var {
+    employeeId,
+    VisitorId,
+    //Name,
+    CompanyName,
+    Date,
+    Timeslot,
+    Message,
+    //avatar,
+  } = req.body;
 
   const appointments = await Appointment.find({
     VisitorId: VisitorId,
@@ -36,17 +42,19 @@ exports.newAppointmentRequest = async (req, res, next) => {
   });
 
   if (appointments.length > 0) {
-    return res.send({ error: "you already booked Appointment on this time slot" });
+    return res.send({
+      error: "you already booked Appointment on this time slot",
+    });
   } else {
     let AppointmentRequest = new Appointment({
       employeeId,
       VisitorId,
-      Name,
+      //Name,
       CompanyName,
       Date,
       Timeslot,
       Message,
-      avatar,
+     // avatar,
     });
     AppointmentRequest.save((err, sucess) => {
       if (err) {
@@ -213,18 +221,21 @@ exports.qrcode = (req, res) => {
     return res.send(err.message);
   }
 };
-exports.searchEmployees =async (req, res)=> {
- 
-
-    try {
-      var name = req.params.name;
-      var names = await Employee.find( {$or : [{ "firstName" : { $regex : new RegExp(name, "i") } } ,{ "lastName" : { $regex : new RegExp(name, "i") }} ]});
-      if(names.length >0){
-        return res.send(names );
-      }else{return res.send({message : "no host with this name"})}
-      
-    }catch(err) {
-      return res.send(err.message);
+exports.searchEmployees = async (req, res) => {
+  try {
+    var name = req.params.name;
+    var names = await Employee.find({
+      $or: [
+        { firstName: { $regex: new RegExp(name, "i") } },
+        { lastName: { $regex: new RegExp(name, "i") } },
+      ],
+    });
+    if (names.length > 0) {
+      return res.send(names);
+    } else {
+      return res.send({ message: "no host with this name" });
     }
-  
-}
+  } catch (err) {
+    return res.send(err.message);
+  }
+};

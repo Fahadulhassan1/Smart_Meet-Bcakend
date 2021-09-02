@@ -140,7 +140,19 @@ exports.verifyEmail = async (req, res) => {
 }
 }
 
+exports.usersDataById = async (req, res) => {
+  var id = req.params.id;
+  if (id == undefined || id == null || id.length == 0) {
+    return res.send("incoorect id");
+  }
 
+  await User.findOne({ _id : id }, (err, user) => {
+    if (!user) {
+      return res.send({ error: "User not found" });
+    }
+    return res.send({ user });
+  });
+}
 
 
 

@@ -11,10 +11,7 @@ const appointmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Visitor",
     },
-    Name: {
-      type: String,
-      required: true,
-    },
+    
     CompanyName: {
       type: String,
     },
@@ -33,10 +30,7 @@ const appointmentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     } , 
-    avatar : { 
-      type : String, 
    
-    }
   },
   { timestamps: true }
 );
