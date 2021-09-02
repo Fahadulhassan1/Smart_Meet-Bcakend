@@ -101,7 +101,12 @@ exports.pendingAppointments = async (req, res, next) => {
         });
       }
     });
+    if (dataToSend.length > 0) {
+
     res.send(dataToSend);
+    } else{
+      res.send({message : "no pending request"});
+    }
   } catch (e) {
     return res.send({ error: "error exists" });
   }
@@ -204,7 +209,11 @@ exports.acceptedAppointments = async function (req, res) {
       });
     }
   });
-  res.send(dataToSend);
+  if(dataToSend.length> 0) {
+  return res.send(dataToSend);
+  } else{
+    return res.send({message : "no accepted request"});
+  }
 };
 
 exports.qrcode = (req, res) => {
