@@ -249,3 +249,26 @@ exports.searchEmployees = async (req, res) => {
   }
 };
 
+exports.reject_Appointment = async (req, res) =>  {
+  const _id = req.params.id;
+  console.log(_id);
+  var accept = true;
+  await Appointment.findOne({ _id }, (err, user) => {
+    if (err || !user) {
+      return res.send({ error: "no appointment found" });
+    }
+    const obj = {
+      isRejected: accept,
+    };
+    user = _.extend(user, obj);
+    user.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot reject currently" });
+      } else {
+        return res
+          .status(200)
+          .send({ message: "appointment rejected sucessfully" });
+      }
+    });
+  });
+}
