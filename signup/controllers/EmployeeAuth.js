@@ -1,6 +1,6 @@
 const Employee = require("../model/employee");
 // const jwt = require("jsonwebtoken");
-
+var ObjectId = require("mongoose").Types.ObjectId;
 // var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
@@ -152,7 +152,7 @@ exports.verifyEmail = async (req, res) => {
 };
 exports.employeeDataById = async (req, res) => {
   var id = req.params.id;
-  var ObjectId = require("mongoose").Types.ObjectId;
+  
   // console.log( ObjectId.isValid(id)); //true
   try {
     if (

@@ -87,9 +87,10 @@ exports.pendingAppointments = async (req, res, next) => {
     const result = pendingAppointments;
     const dataToSend = [];
     result.forEach((data) => {
-      if (!data.AppointmentAccepted) {
+      if (!data.AppointmentAccepted && ! data.isRejected) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
+          isRejected: data.isRejected ,
           _id: data._id,
           employeeId: data.employeeId,
           VisitorId: data.VisitorId,
@@ -259,6 +260,7 @@ exports.reject_Appointment = async (req, res) =>  {
     }
     const obj = {
       isRejected: accept,
+      AppointmentAccepted: false
     };
     user = _.extend(user, obj);
     user.save((err, result) => {
@@ -271,4 +273,36 @@ exports.reject_Appointment = async (req, res) =>  {
       }
     });
   });
+}
+
+exports.rejected_Appointments = async (req, res) => {
+  const visitor = new ObjectId(req.params.VisitorId);
+  console.log(visitor);
+  const accepted_requests = await Appointment.find({ VisitorId: visitor });
+
+  if (accepted_requests.length == 0) {
+    return res.send({ message: "No Rejected Appointment Requests" });
+  }
+  const result = accepted_requests;
+  const dataToSend = [];
+  result.forEach((data) => {
+    if (data.isRejected) {
+      dataToSend.push({
+        AppointmentAccepted: data.AppointmentAccepted,
+        _id: data._id,
+        employeeId: data.employeeId,
+        VisitorId: data.VisitorId,
+        name: data.name,
+        CompanyName: data.CompanyName,
+        Date: data.Date,
+        Timeslot: data.Timeslot,
+        Message: data.Message,
+      });
+    }
+  });
+  if(dataToSend.length> 0) {
+  return res.send(dataToSend);
+  } else{
+    return res.send({message : "no rejected Appointments"});
+  }
 }

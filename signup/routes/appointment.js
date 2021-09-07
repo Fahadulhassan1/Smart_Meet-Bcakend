@@ -13,7 +13,7 @@ const {pendingAppointments} = require("../controllers/appointment");
 const {cancelAppointment} = require("../controllers/appointment");
 const {receivedAppointment} = require("../controllers/appointment");
 const {acceptAppointments} = require("../controllers/appointment");
-const {acceptedAppointments , qrcode , searchEmployees , reject_Appointment} = require("../controllers/appointment");
+const {acceptedAppointments , qrcode , searchEmployees , reject_Appointment , rejected_Appointments} = require("../controllers/appointment");
 const upload = multer({
     limits: {
       fileSize: 1024 * 1024 * 2,
@@ -41,4 +41,5 @@ router.get("/visitor/acceptedrequest/:VisitorId" , acceptedAppointments) ;
 router.get("/visitor/acceptedrequest/qrcode/:id",qrcode)
 router.get("/visitor/searchEmployees/:name" , searchEmployees) ;
 router.post("/employee/rejectAppointment/:id",reject_Appointment)
+router.get("/visitor/rejectedRequests/:VisitorId" , rejected_Appointments) ;
 module.exports = router;
