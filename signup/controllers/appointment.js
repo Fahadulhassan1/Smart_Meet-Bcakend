@@ -49,7 +49,7 @@ exports.newAppointmentRequest = async (req, res, next) => {
     let AppointmentRequest = new Appointment({
       employeeId,
       VisitorId,
-      //Name,
+      //Name,y
       CompanyName,
       Date,
       Timeslot,
@@ -240,11 +240,12 @@ exports.searchEmployees = async (req, res) => {
       ],
     });
     if (names.length > 0) {
-      return res.send(names);
+      return res.status(200).send(names);
     } else {
-      return res.send({ message: "no host with this name" });
+      return res.status(400).send({ message: "no host with this name" });
     }
   } catch (err) {
     return res.send(err.message);
   }
 };
+

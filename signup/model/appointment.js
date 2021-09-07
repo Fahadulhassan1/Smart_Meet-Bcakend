@@ -5,6 +5,7 @@ const appointmentSchema = new mongoose.Schema(
   {
     employeeId: {
       type: mongoose.Schema.Types.ObjectId,
+
       ref: "Employee",
     },
     VisitorId: {
@@ -34,6 +35,9 @@ const appointmentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
+
 const Appointment = mongoose.model('Appointment' ,appointmentSchema );
 module.exports = Appointment;  
 
