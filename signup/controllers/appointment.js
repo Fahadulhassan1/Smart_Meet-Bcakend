@@ -143,9 +143,10 @@ exports.receivedAppointment = async (req, res) => {
     const result = pending_Appointments_request;
     const dataToSend = [];
     result.forEach((data) => {
-      if (!data.AppointmentAccepted) {
+      if (!data.AppointmentAccepted && !data.isRejected ) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
+          isRejected : data.isRejected , 
           _id: data._id,
           employeeId: data.employeeId,
           VisitorId: data.VisitorId,
@@ -286,7 +287,7 @@ exports.rejected_Appointments = async (req, res) => {
   const result = accepted_requests;
   const dataToSend = [];
   result.forEach((data) => {
-    if (data.isRejected) {
+    if (data.isRejected ) {
       dataToSend.push({
         AppointmentAccepted: data.AppointmentAccepted,
         _id: data._id,
