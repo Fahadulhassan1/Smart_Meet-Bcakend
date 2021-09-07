@@ -1,13 +1,19 @@
 const Employee = require("../model/employee");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
-var nodemailer = require("nodemailer");
+// var nodemailer = require("nodemailer");
 const _ = require("lodash");
 exports.signup = async (req, res) => {
-  
-    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password, avatar } =
-      req.body;
-    
+  var {
+    firstName,
+    lastName,
+    username,
+    PhoneNumber,
+    email,
+    dateOfBirth,
+    password,
+    avatar,
+  } = req.body;
 
   Employee.findOne({ email }).exec((err, employee) => {
     if (employee) {
@@ -18,7 +24,8 @@ exports.signup = async (req, res) => {
     }
 
     let newUser = new Employee({
-      firstName, lastName,
+      firstName,
+      lastName,
       username,
       PhoneNumber,
       email,
@@ -97,14 +104,13 @@ exports.profilepicture = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   console.log("done1");
 
-    var data = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+  var data = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
 
-      avatar: req.body.avatar,
-    };
-    //console.log(data);
-  
+    avatar: req.body.avatar,
+  };
+  //console.log(data);
 
   var update = Employee.findByIdAndUpdate(
     req.body.id,
@@ -132,28 +138,39 @@ exports.viewProfile = async (req, res, next) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  const email = req.params.email ;
-  try{
- await  Employee.findOne({ email }, (err, user) => { 
-    if(user ) {
-       return res.status(200).send({ message: "Email exists " });
-    
-    }
-    return res.status(404).send({ message: "No email found" });
-  
-  })
-}catch (err) { return res.status(500).send({ message: err.message }); }
-}
+  const email = req.params.email;
+  try {
+    await Employee.findOne({ email }, (err, user) => {
+      if (user) {
+        return res.status(200).send({ message: "Email exists " });
+      }
+      return res.status(404).send({ message: "No email found" });
+    });
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+};
 exports.employeeDataById = async (req, res) => {
   var id = req.params.id;
-  if (id == undefined || id == null || id.length == 0) {
-    return res.send("incoorect id");
-  }
-
-  await Employee.findOne({ _id : id }, (err, user) => {
-    if (!user) {
-      return res.send({ error: "User not found" });
+  var ObjectId = require("mongoose").Types.ObjectId;
+  // console.log( ObjectId.isValid(id)); //true
+  try {
+    if (
+      id === undefined ||
+      id === null ||
+      id.length === 0 ||
+      !ObjectId.isValid(id)
+    ) {
+      return res.status(400).send("incoorect id");
+    } else {
+      await Employee.findOne({ _id: id }, (err, user) => {
+        if (err) {
+          return res.status(400).send({ error: "employee not found" });
+        }
+        return res.status(200).send({ user });
+      });
     }
-    return res.send({ user });
-  });
-}
+  } catch (err) {
+    return res.status(400).send({ error: err });
+  }
+};

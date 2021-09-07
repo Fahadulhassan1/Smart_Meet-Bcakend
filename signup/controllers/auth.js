@@ -1,8 +1,8 @@
 const User = require("../model/user");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
-var nodemailer = require("nodemailer");
-const qrcode = require("qrcode");
+// var nodemailer = require("nodemailer");
+// const qrcode = require("qrcode");
 const _ = require("lodash");
 
 exports.signup = async (req, res) => {
@@ -142,7 +142,8 @@ exports.verifyEmail = async (req, res) => {
 
 exports.usersDataById = async (req, res) => {
   var id = req.params.id;
-  if (id == undefined || id == null || id.length == 0) {
+  var ObjectId = require('mongoose').Types.ObjectId;
+  if (id == undefined || id == null || id.length == 0 || ! ObjectId.isValid(id)) {
     return res.send("incoorect id");
   }
 
