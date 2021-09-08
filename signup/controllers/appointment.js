@@ -39,9 +39,10 @@ exports.newAppointmentRequest = async (req, res, next) => {
     VisitorId: VisitorId,
     Date: Date,
     Timeslot: Timeslot,
+    
   });
-
-  if (appointments.length > 0) {
+ 
+  if (appointments.length > 0 && ! appointments[0].isRejected) {
     return res.send({
       error: "you already booked Appointment on this time slot",
     });
