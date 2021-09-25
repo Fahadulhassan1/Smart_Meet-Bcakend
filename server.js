@@ -8,6 +8,7 @@ const app = express();
 const authRoutes = require('./signup/routes/auth');
 const EmployeeAuthRoutes = require("./signup/routes/employeAuth");
 const AppointmentRoutes = require("./signup/routes/appointment");
+const Employee_LocationRoutes = require ("./signup/routes/employee_Location")
 app.use(express.json());
 
 app.use(cors());
@@ -15,7 +16,9 @@ app.use(cors());
 //middleswares
 app.use('/api' , authRoutes);
 app.use('/api' , EmployeeAuthRoutes)
-app.use('/api' , AppointmentRoutes)
+app.use('/api', AppointmentRoutes)
+app.use ('/api' , Employee_LocationRoutes)
+
 let port = process.env.PORT ;
 if(port == null || port == ""){
 port = 3000
