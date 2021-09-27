@@ -57,7 +57,7 @@ const employeeSchema = new mongoose.Schema({
   },
   authorize: {
     type : Boolean, 
-    default : true,
+    default : false,
   
   }
   
