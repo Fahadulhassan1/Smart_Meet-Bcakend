@@ -17,7 +17,7 @@ const { viewProfile } = require("../controllers/EmployeeAuth");
 const {
   verifyEmail,
   employeeDataById,
-  allUser_Without_Acctivation,
+  
 } = require("../controllers/EmployeeAuth");
 //multer
 const upload = multer({
@@ -55,8 +55,5 @@ router.get("/employee/:email/viewProfile", viewProfile);
 router.get ("/employee/verifyemail/:email", verifyEmail);
 
 router.get("/employee/employeeDataById/:id", employeeDataById)
-router.get(
-  "/employee/allUser_Without_Acctivation",
-  allUser_Without_Acctivation
-);
+
 module.exports = router;

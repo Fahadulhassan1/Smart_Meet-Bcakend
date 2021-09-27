@@ -9,6 +9,7 @@ const authRoutes = require("./signup/routes/auth");
 const EmployeeAuthRoutes = require("./signup/routes/employeAuth");
 const AppointmentRoutes = require("./signup/routes/appointment");
 const Employee_LocationRoutes = require("./signup/routes/employee_Location");
+const Admin_PanelRoutes = require("./signup/routes/admin_panel");
 app.use(express.json());
 
 app.use(cors());
@@ -18,6 +19,7 @@ app.use("/api", authRoutes);
 app.use("/api", EmployeeAuthRoutes);
 app.use("/api", AppointmentRoutes);
 app.use("/api", Employee_LocationRoutes);
+app.use("/api", Admin_PanelRoutes);
 
 let port = process.env.PORT;
 if (port == null || port == "") {
