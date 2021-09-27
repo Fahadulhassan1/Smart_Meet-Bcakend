@@ -174,6 +174,8 @@ exports.employeeDataById = async (req, res) => {
     return res.status(400).send({ error: err });
   }
 };
- exports.allUser_Without_Acctivation = function (req, res) {
-  const employee = await Employee.find()
+ exports.allUser_Without_Acctivation = async function (req, res) {
+   await Employee.find({ "authorize": false }, (err, employee)=> {
+     return res.send(employee)
+   })
  }

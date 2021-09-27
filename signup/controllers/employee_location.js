@@ -4,18 +4,18 @@ var ObjectId = require("mongodb").ObjectID;
 const _ = require("lodash");
 
 exports.employee_Location = async (req, res) => {
-  console.log("hello");
-  var { employeeId, x_Axis, y_Axis } = req.body;
+  
+  var { employeeId, lattitude, longitude } = req.body;
   let employeeLocation = new Employee_Location({
     employeeId,
-    x_Axis,
-    y_Axis,
+    lattitude,
+    longitude,
   });
   employeeLocation.save((err, sucess) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
-    return res.json({ message: "appointment request sent successfully" });
+    return res.json({ message: "location added successfully" });
   });
 };
 
