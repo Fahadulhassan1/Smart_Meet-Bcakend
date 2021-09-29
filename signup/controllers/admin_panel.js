@@ -102,7 +102,6 @@ exports.deleteVisitorAccount = async function (req, res) {
 
 exports.addTowatchlistVisitor = async (req, res) => {
   const email = req.params.email;
-
   var accept = true;
   await Visitor.findOne({ email }, (err, visitor) => {
     if (err || !visitor) {
@@ -123,7 +122,6 @@ exports.addTowatchlistVisitor = async (req, res) => {
 };
 exports.remove_watchlist_Visitor = async (req, res) => {
   const email = req.params.email;
-  console.log(email);
   var remove = false;
   await Visitor.findOne({ email }, (err, visitor) => {
     if (err || !visitor) {
