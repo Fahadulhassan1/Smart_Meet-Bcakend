@@ -17,6 +17,6 @@ router.get(
 
 router.put("/employee/accept_employee/:email", accept_employee);
 router.put("/employee/reject_employee/:email", reject_employee);
-router.delete("/employee/deleteAccount/:email", deleteEmployeeAccount);
-router.delete("/visitor/deleteAccount/:email", deleteVisitorAccount);
+router.delete("/employee/deleteAccount/:id", deleteEmployeeAccount);
+router.delete("/visitor/deleteAccount/:id", deleteVisitorAccount);
 module.exports = router;

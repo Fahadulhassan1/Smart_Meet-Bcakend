@@ -74,7 +74,7 @@ exports.deleteEmployeeAccount = async function (req, res) {
   try {
     // var id = new ObjectId(req.params.id);
 
-    const employee = await Employee.findOneAndDelete(req.params.email);
+    const employee = await Employee.findByIdAndDelete (req.params.id);
 
     if (!employee) {
       return res.send({ error: "no employee found" });
@@ -89,7 +89,7 @@ exports.deleteVisitorAccount = async function (req, res) {
   try {
     // var id = new ObjectId(req.params.id);
 
-    const visitor = await Visitor.findOneAndDelete(req.params.email);
+    const visitor = await Visitor.findByIdAndDelete(req.params.id);
 
     if (!visitor) {
       return res.send({ error: "no visitor found" });
