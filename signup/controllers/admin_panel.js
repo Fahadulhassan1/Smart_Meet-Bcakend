@@ -99,3 +99,46 @@ exports.deleteVisitorAccount = async function (req, res) {
     return res.send({ error: err.message });
   }
 };
+
+exports.watchlistVisitor = async (req, res) => {
+  const email = req.params.email;
+  console.log(email);
+  var accept = true;
+  await Visitor.findOne({ email }, (err, visitor) => {
+    if (err || !visitor) {
+      return res.send({ error: "no account" });
+    }
+    const obj = {
+      isWatchListed: accept,
+    };
+    visitor = _.extend(visitor, obj);
+    visitor.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot add to watchlist currently" });
+      } else {
+        return res.status(200).send({ message: "added to watchlist" });
+      }
+    });
+  });
+};
+exports.remove_watchlist_Visitor = async (req, res) => {
+  const email = req.params.email;
+  console.log(email);
+  var remove = false;
+  await Visitor.findOne({ email }, (err, visitor) => {
+    if (err || !visitor) {
+      return res.send({ error: "no account" });
+    }
+    const obj = {
+      isWatchListed: remove,
+    };
+    visitor = _.extend(visitor, obj);
+    visitor.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot remove from watchlist currently" });
+      } else {
+        return res.status(200).send({ message: "removed from watchlist" });
+      }
+    });
+  });
+};

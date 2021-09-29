@@ -51,6 +51,11 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  isWatchListed: {
+    type: Boolean,
+    default: false,
+
+  },
   avatar: {
   type : String,
   
