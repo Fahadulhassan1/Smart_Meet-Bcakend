@@ -102,7 +102,7 @@ exports.deleteVisitorAccount = async function (req, res) {
 
 exports.addTowatchlistVisitor = async (req, res) => {
   const email = req.params.email;
-  console.log(email);
+
   var accept = true;
   await Visitor.findOne({ email }, (err, visitor) => {
     if (err || !visitor) {
