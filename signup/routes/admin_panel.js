@@ -6,7 +6,9 @@ const router = express.Router();
 const {
   allUser_Without_Acctivation,
   accept_employee,
-  reject_employee
+  reject_employee,
+  deleteEmployeeAccount,
+  deleteVisitorAccount,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -15,4 +17,6 @@ router.get(
 
 router.put("/employee/accept_employee/:email", accept_employee);
 router.put("/employee/reject_employee/:email", reject_employee);
+router.delete("/employee/deleteAccount/:email", deleteEmployeeAccount);
+router.delete("/visitor/deleteAccount/:email", deleteVisitorAccount);
 module.exports = router;

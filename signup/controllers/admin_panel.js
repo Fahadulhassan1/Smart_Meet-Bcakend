@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const Employee = require("../model/employee");
+const Visitor = require("../model/user");
 const Appointment = require("../model/appointment");
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
@@ -18,7 +19,7 @@ exports.allUser_Without_Acctivation = async  (req, res)=> {
   if (employee.length > 0) {
    return  res.send(employee)
   } else {
-    return res.send({error : "no pending employee verification request"})
+    return res.send(employee)
   }
 };
 
@@ -66,4 +67,35 @@ exports.reject_employee = async (req, res) => {
       }
     });
   });
+};
+
+exports.deleteEmployeeAccount = async function (req, res) {
+  
+  try {
+    // var id = new ObjectId(req.params.id);
+
+    const employee = await Employee.findOneAndDelete(req.params.email);
+
+    if (!employee) {
+      return res.send({ error: "no employee found" });
+    }
+    return res.send({ message: "employee successfully deleted" });
+  } catch (err) {
+    return res.send({ error: err.message });
+  }
+}
+
+exports.deleteVisitorAccount = async function (req, res) {
+  try {
+    // var id = new ObjectId(req.params.id);
+
+    const visitor = await Visitor.findOneAndDelete(req.params.email);
+
+    if (!visitor) {
+      return res.send({ error: "no visitor found" });
+    }
+    return res.send({ message: "visitor successfully deleted" });
+  } catch (err) {
+    return res.send({ error: err.message });
+  }
 };
