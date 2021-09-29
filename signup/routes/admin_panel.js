@@ -10,7 +10,8 @@ const {
   deleteEmployeeAccount,
   deleteVisitorAccount,
   remove_watchlist_Visitor,
-  watchlistVisitor,
+  addTowatchlistVisitor,
+  allWatchlisted_Visitors,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -22,5 +23,6 @@ router.put("/employee/reject_employee/:email", reject_employee);
 router.delete("/employee/deleteAccount/:id", deleteEmployeeAccount);
 router.delete("/visitor/deleteAccount/:id", deleteVisitorAccount);
 router.put("/visitor/removeWatchlist/:email", remove_watchlist_Visitor);
-router.put("/visitor/addToWatchlist/:email", watchlistVisitor);
+router.put("/visitor/addToWatchlist/:email", addTowatchlistVisitor);
+router.get("/visitor/watchListVistors", allWatchlisted_Visitors);
 module.exports = router;

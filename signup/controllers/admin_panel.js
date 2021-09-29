@@ -100,7 +100,7 @@ exports.deleteVisitorAccount = async function (req, res) {
   }
 };
 
-exports.watchlistVisitor = async (req, res) => {
+exports.addTowatchlistVisitor = async (req, res) => {
   const email = req.params.email;
   console.log(email);
   var accept = true;
@@ -142,3 +142,15 @@ exports.remove_watchlist_Visitor = async (req, res) => {
     });
   });
 };
+
+ exports.allWatchlisted_Visitors = async (req, res) => {
+   var visitor = await Visitor.find({
+      isWatchListed: true 
+   });
+   console.log(visitor);
+   if (visitor.length > 0) {
+     return res.send(visitor);
+   } else {
+     return res.send(visitor);
+   }
+ };
