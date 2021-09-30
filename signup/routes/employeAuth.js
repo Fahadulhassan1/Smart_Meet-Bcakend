@@ -39,7 +39,9 @@ router.post("/employee/signin", signin);
 router.put("/forgetPassword", forgetPassword);
 router.get("/employee/allUsers", async (req, res) => {
   try {
-    const users = await Employee.find({});
+    const users = await Employee.find({
+      $and: [{ authorize: true }, { isRejected: false }],
+    });
     res.send(users);
   } catch (e) {
     res.status(500).send(e);

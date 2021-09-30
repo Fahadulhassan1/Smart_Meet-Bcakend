@@ -151,4 +151,16 @@ exports.remove_watchlist_Visitor = async (req, res) => {
    } else {
      return res.send(visitor);
    }
- };
+};
+ 
+exports.next_TwentyfourHoursAppointments = async (req, res) => {
+  
+}
+
+exports.signIn = async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const verification = await Admin.find({ $and: [{ email: email }, { password: password }] });
+
+  
+}
