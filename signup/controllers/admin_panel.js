@@ -179,7 +179,7 @@ exports.verifysignIn = async (req, res) => {
   }
 };
 
-exports.previous_TwentyfourHoursAppointments = async (req, res) => {
+exports.next_TwentyfourHoursAppointmentscounting = async (req, res) => {
   var currentDateobj = new Date();
 
   var today = new Date();
@@ -195,6 +195,25 @@ exports.previous_TwentyfourHoursAppointments = async (req, res) => {
       { AppointmentAccepted : true},
     ],
   });
-console.log( appointments.length);
+
   res.json(appointments.length);
+};
+
+exports.next_TwentyfourHoursAppointments= async (req, res) => {
+  var currentDateobj = new Date();
+
+  var today = new Date();
+  console.log(today);
+  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
+  
+
+  const appointments = await Appointment.find({
+    $and: [
+      { Date: { $gt: today } },
+      { Date: { $lt: tomorrow } },
+      { AppointmentAccepted: true },
+    ],
+  });
+  
+  res.json(appointments);
 };

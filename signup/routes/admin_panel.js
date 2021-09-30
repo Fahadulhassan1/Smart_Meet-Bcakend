@@ -14,7 +14,8 @@ const {
   allWatchlisted_Visitors,
   signIn,
   verifysignIn,
-  previous_TwentyfourHoursAppointments,
+  next_TwentyfourHoursAppointmentscounting,
+  next_TwentyfourHoursAppointments,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -30,5 +31,12 @@ router.put("/visitor/addToWatchlist/:email", addTowatchlistVisitor);
 router.get("/visitor/watchListVistors", allWatchlisted_Visitors);
 router.post("/admin/signIn", signIn);
 router.get("/admin/signIn", verifysignIn);
-router.get("/admin/nextDayAppointments", previous_TwentyfourHoursAppointments);
+router.get(
+  "/admin/nextDayAppointmentscounting",
+  next_TwentyfourHoursAppointmentscounting
+);
+router.get(
+  "/admin/nextDayAppointments",
+  next_TwentyfourHoursAppointments
+);
 module.exports = router;
