@@ -1,7 +1,7 @@
 const User = require("../model/user");
 const Employee = require("../model/employee");
 const Visitor = require("../model/user");
-const Appointment = require("../model/appointment");
+const Admin = require("../model/admin");
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
@@ -158,9 +158,27 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
 }
 
 exports.signIn = async (req, res) => {
-  const email = req.body.email;
+   const email = req.body.email;
+  
   const password = req.body.password;
-  const verification = await Admin.find({ $and: [{ email: email }, { password: password }] });
+  const admin = new Admin({ email, password })
+  admin.save((err, save) => {
+    if (err) {
+    res.send(err);
+  }else { res.send(admin)}
+})
+  // const verification = await Admin.find();
+  
 
   
 }
+exports.verifysignIn = async (req, res) => {
+  const email = req.body.email;
+
+  const password = req.body.password;
+  
+  const verification = await Admin.find({ email: email, password: password });
+  if (verification.length > 0) {
+    res.send(verification);
+  } else{ res.json('Invalid credentials')}
+};
