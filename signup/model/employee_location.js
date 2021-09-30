@@ -9,11 +9,11 @@ const locationSchema = new mongoose.Schema(
       ref: "Employee",
       required: true,
     },
-    x_Axis: {
+    longitude: {
       type: String,
       required: true,
     },
-    y_Axis: {
+    lattitude: {
       type: String,
       required: true,
     },
