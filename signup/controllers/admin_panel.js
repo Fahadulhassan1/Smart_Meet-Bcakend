@@ -189,7 +189,11 @@ exports.previous_TwentyfourHoursAppointments = async (req, res) => {
 
   
   const appointments = await Appointment.find({
-    $and: [{ Date: { $gt: today } }, { Date: { $lt: tomorrow } }],
+    $and: [
+      { Date: { $gt: today } },
+      { Date: { $lt: tomorrow } },
+      { AppointmentAccepted : true},
+    ],
   });
 console.log( appointments.length);
   res.json(appointments.length);
