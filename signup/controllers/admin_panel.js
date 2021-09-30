@@ -2,6 +2,7 @@ const User = require("../model/user");
 const Employee = require("../model/employee");
 const Visitor = require("../model/user");
 const Admin = require("../model/admin");
+const Appointment = require("../model/appointment");
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
@@ -9,25 +10,24 @@ var ObjectId = require("mongoose").Types.ObjectId;
 // var nodemailer = require("nodemailer");
 const _ = require("lodash");
 
-
 const { rawListeners } = require("../model/user");
-exports.allUser_Without_Acctivation = async  (req, res)=> {
+exports.allUser_Without_Acctivation = async (req, res) => {
   var employee = await Employee.find({
     $and: [{ authorize: false }, { isRejected: false }],
   });
   console.log(employee);
   if (employee.length > 0) {
-   return  res.send(employee)
+    return res.send(employee);
   } else {
-    return res.send(employee)
+    return res.send(employee);
   }
 };
 
-exports.accept_employee = async  (req, res)=> {
+exports.accept_employee = async (req, res) => {
   const email = req.params.email;
   console.log(email);
   var accept = true;
-  await Employee.findOne({ email }, (err , employee) => {
+  await Employee.findOne({ email }, (err, employee) => {
     if (err || !employee) {
       return res.send({ error: "no account" });
     }
@@ -39,13 +39,11 @@ exports.accept_employee = async  (req, res)=> {
       if (err) {
         return res.send({ error: "cannot accept currently" });
       } else {
-        return res
-          .status(200)
-          .send({ message: "employee account accepted" });
+        return res.status(200).send({ message: "employee account accepted" });
       }
     });
   });
-}
+};
 
 exports.reject_employee = async (req, res) => {
   const email = req.params.email;
@@ -63,18 +61,19 @@ exports.reject_employee = async (req, res) => {
       if (err) {
         return res.send({ error: "cannot accept currently" });
       } else {
-        return res.status(200).send({ message: "employee account rejected sucessfully" });
+        return res
+          .status(200)
+          .send({ message: "employee account rejected sucessfully" });
       }
     });
   });
 };
 
 exports.deleteEmployeeAccount = async function (req, res) {
-  
   try {
     // var id = new ObjectId(req.params.id);
 
-    const employee = await Employee.findByIdAndDelete (req.params.id);
+    const employee = await Employee.findByIdAndDelete(req.params.id);
 
     if (!employee) {
       return res.send({ error: "no employee found" });
@@ -83,7 +82,7 @@ exports.deleteEmployeeAccount = async function (req, res) {
   } catch (err) {
     return res.send({ error: err.message });
   }
-}
+};
 
 exports.deleteVisitorAccount = async function (req, res) {
   try {
@@ -141,44 +140,57 @@ exports.remove_watchlist_Visitor = async (req, res) => {
   });
 };
 
- exports.allWatchlisted_Visitors = async (req, res) => {
-   var visitor = await Visitor.find({
-      isWatchListed: true 
-   });
-   console.log(visitor);
-   if (visitor.length > 0) {
-     return res.send(visitor);
-   } else {
-     return res.send(visitor);
-   }
+exports.allWatchlisted_Visitors = async (req, res) => {
+  var visitor = await Visitor.find({
+    isWatchListed: true,
+  });
+  console.log(visitor);
+  if (visitor.length > 0) {
+    return res.send(visitor);
+  } else {
+    return res.send(visitor);
+  }
 };
- 
-exports.next_TwentyfourHoursAppointments = async (req, res) => {
-  
-}
 
 exports.signIn = async (req, res) => {
-   const email = req.body.email;
-  
+  const email = req.body.email;
+
   const password = req.body.password;
-  const admin = new Admin({ email, password })
+  const admin = new Admin({ email, password });
   admin.save((err, save) => {
     if (err) {
-    res.send(err);
-  }else { res.send(admin)}
-})
+      res.send(err);
+    } else {
+      res.send(admin);
+    }
+  });
   // const verification = await Admin.find();
-  
-
-  
-}
+};
 exports.verifysignIn = async (req, res) => {
   const email = req.body.email;
 
   const password = req.body.password;
-  
+
   const verification = await Admin.find({ email: email, password: password });
   if (verification.length > 0) {
     res.send(verification);
-  } else{ res.json('Invalid credentials')}
+  } else {
+    res.json("Invalid credentials");
+  }
+};
+
+exports.previous_TwentyfourHoursAppointments = async (req, res) => {
+  var currentDateobj = new Date();
+
+  var today = new Date();
+  console.log(today);
+  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
+  console.log(tomorrow);
+
+  
+  const appointments = await Appointment.find({
+    $and: [{ Date: { $gt: today } }, { Date: { $lt: tomorrow } }],
+  });
+console.log( appointments.length);
+  res.json(appointments.length);
 };
