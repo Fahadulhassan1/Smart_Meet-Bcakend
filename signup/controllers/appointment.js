@@ -81,7 +81,7 @@ exports.pendingAppointments = async (req, res, next) => {
     const pendingAppointments = await Appointment.find({ VisitorId: user });
 
     if (pendingAppointments.length == 0) {
-      return res.send({ message: "No pending Appointment Requests" });
+      return res.status(399).send({ message: "No pending Appointment Requests" });
     }
 
     // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
