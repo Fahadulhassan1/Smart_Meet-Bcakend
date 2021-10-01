@@ -107,7 +107,7 @@ exports.pendingAppointments = async (req, res, next) => {
 
     res.send(dataToSend);
     } else{
-      res.send({message : "no pending request"});
+      res.status(399).send({message : "no pending request"});
     }
   } catch (e) {
     return res.send({ error: "error exists" });
