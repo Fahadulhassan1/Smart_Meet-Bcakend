@@ -10,9 +10,9 @@ const appointmentSchema = new mongoose.Schema(
     },
     VisitorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Visitor",
+      ref: "User",
     },
-    
+
     CompanyName: {
       type: String,
     },
@@ -30,12 +30,11 @@ const appointmentSchema = new mongoose.Schema(
     AppointmentAccepted: {
       type: Boolean,
       default: false,
-    } , 
+    },
     isRejected: {
-      type : Boolean,
-      default:  false
-    }
-   
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
