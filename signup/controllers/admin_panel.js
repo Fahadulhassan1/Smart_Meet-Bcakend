@@ -187,26 +187,6 @@ exports.next_TwentyfourHoursAppointmentscounting = async (req, res) => {
   var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
   console.log(tomorrow);
 
-  
-  const appointments = await Appointment.find({
-    $and: [
-      { Date: { $gt: today } },
-      { Date: { $lt: tomorrow } },
-      { AppointmentAccepted : true},
-    ],
-  });
-
-  res.json(appointments.length);
-};
-
-exports.next_TwentyfourHoursAppointments= async (req, res) => {
-  var currentDateobj = new Date();
-
-  var today = new Date();
-  console.log(today);
-  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
-  
-
   const appointments = await Appointment.find({
     $and: [
       { Date: { $gt: today } },
@@ -214,6 +194,25 @@ exports.next_TwentyfourHoursAppointments= async (req, res) => {
       { AppointmentAccepted: true },
     ],
   });
-  
+
+  res.json(appointments.length);
+};
+
+exports.next_TwentyfourHoursAppointments = async (req, res) => {
+  var currentDateobj = new Date();
+
+  console.log('hellow')
+  var today = new Date();
+  console.log(today);
+  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
+
+  const appointments = await Appointment.find({
+    $and: [
+      { Date: { $gt: today } },
+      { Date: { $lt: tomorrow } },
+      { AppointmentAccepted: true },
+    ],
+  }).populate("VisitorId");
+
   res.json(appointments);
 };
