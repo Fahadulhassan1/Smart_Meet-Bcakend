@@ -131,7 +131,7 @@ exports.cancelAppointment = async (req, res) => {
 exports.receivedAppointment = async (req, res) => {
   try {
     const user = new ObjectId(req.params.employeeId);
-    console.log(user);
+    
     const pending_Appointments_request = await Appointment.find({
       employeeId: user,
     });
@@ -139,7 +139,7 @@ exports.receivedAppointment = async (req, res) => {
     if (pending_Appointments_request.length == 0) {
       return res.send({ message: "No pending Appointment Requests" });
     }
-
+     
     // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
     const result = pending_Appointments_request;
     const dataToSend = [];
@@ -308,3 +308,41 @@ exports.rejected_Appointments = async (req, res) => {
     return res.send({message : "no rejected Appointments"});
   }
 }
+
+exports.hostAcceptedAppointments = async (req, res) => {
+  try {
+    const user = new ObjectId(req.params.employeeId);
+    console.log(user);
+    const pending_Appointments_request = await Appointment.find({
+      employeeId: user,
+    });
+
+    if (pending_Appointments_request.length == 0) {
+      return res.send({ message: "No accepted Appointments" });
+    }
+    var date = new Date();
+    // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+    const result = pending_Appointments_request;
+    const dataToSend = [];
+
+    result.forEach((data) => {
+      if (data.AppointmentAccepted && data.Date > date) {
+        dataToSend.push({
+          AppointmentAccepted: data.AppointmentAccepted,
+          isRejected: data.isRejected,
+          _id: data._id,
+          employeeId: data.employeeId,
+          VisitorId: data.VisitorId,
+          name: data.name,
+          CompanyName: data.CompanyName,
+          Date: data.Date,
+          Timeslot: data.Timeslot,
+          Message: data.Message,
+        });
+      }
+    });
+    res.send(dataToSend);
+  } catch (e) {
+    return res.send({ error: "error exists" });
+  }
+};
