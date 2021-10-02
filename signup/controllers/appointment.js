@@ -110,7 +110,7 @@ exports.pendingAppointments = async (req, res, next) => {
       res.status(399).send({message : "no pending request"});
     }
   } catch (e) {
-    return res.send({ error: "error exists" });
+    return res.status(400).send({ error: "error exists" });
   }
 };
 exports.cancelAppointment = async (req, res) => {
