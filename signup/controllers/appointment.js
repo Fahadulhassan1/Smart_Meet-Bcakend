@@ -137,7 +137,7 @@ exports.receivedAppointment = async (req, res) => {
     });
 
     if (pending_Appointments_request.length == 0) {
-      return res.send({ message: "No pending Appointment Requests" });
+      return res.status(399).send({ message: "No pending Appointment Requests" });
     }
      
     // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
@@ -161,7 +161,7 @@ exports.receivedAppointment = async (req, res) => {
     });
     res.send(dataToSend);
   } catch (e) {
-    return res.send({ error: "error exists" });
+    return res.status(399).send({ error: "error exists" });
   }
 };
 exports.acceptAppointments = async (req, res) => {
