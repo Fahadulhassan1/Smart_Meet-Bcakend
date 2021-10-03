@@ -318,7 +318,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
     });
 
     if (pending_Appointments_request.length == 0) {
-      return res.stautus(399).send({ message: "No accepted Appointments" });
+      return res.status(399).send({ message: "No accepted Appointments" });
     }
     var date = new Date();
     // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
@@ -343,6 +343,6 @@ exports.hostAcceptedAppointments = async (req, res) => {
     });
     res.send(dataToSend);
   } catch (e) {
-    return res.stautus(399).send({ error: "error exists" });
+    return res.status(399).send({ error: "error exists" });
   }
 };
