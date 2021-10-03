@@ -193,7 +193,7 @@ exports.acceptedAppointments = async function (req, res) {
   const accepted_requests = await Appointment.find({ VisitorId: visitor });
 
   if (accepted_requests.length == 0) {
-    return res.send({ message: "No accepted Appointment Requests" });
+    return res.status(399).send({ message: "No accepted Appointment Requests" });
   }
   const result = accepted_requests;
   const dataToSend = [];
@@ -215,7 +215,7 @@ exports.acceptedAppointments = async function (req, res) {
   if(dataToSend.length> 0) {
   return res.send(dataToSend);
   } else{
-    return res.send({message : "no accepted request"});
+    return res.status(399).send({message : "no accepted request"});
   }
 };
 
