@@ -152,7 +152,7 @@ exports.allWatchlisted_Visitors = async (req, res) => {
   }
 };
 
-exports.signIn = async (req, res) => {
+exports.signUp = async (req, res) => {
   const email = req.body.email;
 
   const password = req.body.password;

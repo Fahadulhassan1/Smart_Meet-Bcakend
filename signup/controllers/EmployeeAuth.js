@@ -104,7 +104,19 @@ exports.profilepicture = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   console.log("done1");
   var {id,firstName , lastName , avatar} = req.body
-
+ 
+ if (avatar === undefined || avatar === null || avatar == "") {
+   var avat = await Employee.findById(id);
+   avatar = avat.avatar;
+ }
+ if (firstName === undefined || firstName === null || firstName == "") {
+   var firstNa = await Employee.findById(id);
+   firstName = firstNa.firstName;
+ }
+ if (lastName === undefined || lastName === null || lastName == "") {
+   var lastNa = await Employee.findById(id);
+   lastName = lastNa.lastName;
+ }
   
   //console.log(data);
 

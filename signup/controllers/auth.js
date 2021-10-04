@@ -92,9 +92,26 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log(req.body.id);
-  const { id, firstName, lastName, avatar } = req.body;
+  var { id, firstName, lastName, avatar } = req.body;
   console.log(id);
- 
+  console.log(lastName)
+  if (avatar === undefined || avatar === null || avatar == "") {
+    var avat = await User.findById(id);
+    avatar = avat.avatar;
+  }
+   if (firstName === undefined || firstName === null || firstName == "") {
+     var firstNa = await User.findById(id );
+     firstName = firstNa.firstName;
+   }
+   if (lastName === undefined || lastName === null|| lastName == "") {
+     var lastNa = await User.findById(id);
+    lastName = lastNa.lastName;
+  }
+  
+    
+  
+
+  
     // var data = {
     //   firstName: req.body.firstName,
     //   lastName: req.body.lastName,
@@ -102,6 +119,7 @@ exports.updateProfile = async (req, res) => {
     //   avatar: req.body.avatar,
     // };
   //console.log(data)
+
   var update =await User.findByIdAndUpdate(
     { _id: id },
     {

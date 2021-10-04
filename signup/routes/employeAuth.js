@@ -48,7 +48,7 @@ router.get("/employee/allUsers", async (req, res) => {
   }
 });
 
-router.post("/employee/updateProfile",  updateProfile);
+router.put("/employee/updateProfile",  updateProfile);
 
 router.get("/employee/:id/avatar", profilepicture);
 
