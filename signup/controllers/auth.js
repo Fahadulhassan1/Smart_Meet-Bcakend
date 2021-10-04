@@ -252,12 +252,12 @@ exports.usersDataById = async (req, res) => {
 //     return res.json({ error: "something went wrong" });
 //   }
 // };
-exports.updateProfilee = async (req, res) => {
-  //console.log(req.params.id);
- // res.send(req.params.id);
-  console.log(req.params.firstName);
-  res.send(req.body.firstName)
-  console.log("done1");
+// exports.updateProfilee = async (req, res) => {
+//   //console.log(req.params.id);
+//  // res.send(req.params.id);
+//   console.log(req.params.firstName);
+//   res.send(req.body.firstName)
+//   console.log("done1");
 
  
-};
+// };

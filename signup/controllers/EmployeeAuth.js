@@ -103,24 +103,23 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log("done1");
+  var {id,firstName , lastName , avatar} = req.body
 
-  var data = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-
-    avatar: req.body.avatar,
-  };
+  
   //console.log(data);
 
   var update = Employee.findByIdAndUpdate(
-    req.body.id,
-    data,
+    { _id: id }, {
+      firstName: firstName,
+      lastName: lastName,
+      avatar : avatar
+    } ,
     function (err, data) {
       if (err) {
         console.log(err.mesage);
       } else {
         res.send("done updated Employee");
-        console.log("Updated Employee : ", data);
+        console.log("Updated Employee : ", update);
       }
     }
   );
