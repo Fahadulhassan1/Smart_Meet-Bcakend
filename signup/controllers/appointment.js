@@ -237,10 +237,15 @@ exports.searchEmployees = async (req, res) => {
   try {
     var name = req.params.name;
     var names = await Employee.find({
-      $or: [
-        { firstName: { $regex: new RegExp(name, "i") } },
-        { lastName: { $regex: new RegExp(name, "i") } },
-      ],
+      $and: [
+        {
+          $or: [
+            { firstName: { $regex: new RegExp(name, "i") } },
+            { lastName: { $regex: new RegExp(name, "i") } },
+          ]
+        }, { authorize: true }
+      ]
+      
     });
     if (names.length > 0) {
       return res.status(200).send(names);
