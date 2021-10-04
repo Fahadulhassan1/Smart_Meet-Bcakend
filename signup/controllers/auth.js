@@ -91,23 +91,33 @@ exports.profilepicture = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  console.log("done1");
+  console.log(req.body.id);
+  const { id, firstName, lastName, avatar } = req.body;
+  console.log(id);
  
-    var data = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+    // var data = {
+    //   firstName: req.body.firstName,
+    //   lastName: req.body.lastName,
 
-      avatar: req.body.avatar,
-   
+    //   avatar: req.body.avatar,
+    // };
+  //console.log(data)
+  var update =await User.findByIdAndUpdate(
+    { _id: id },
+    {
+      firstName: firstName,
+      lastName: lastName,
+      avatar: avatar,
+    },
+    function (err, data) {
+      if (err) {
+        console.log(err.mesage);
+      } else {
+        res.send("done updated user");
+        console.log("Updated User : ", data);
+      }
     }
-  var update = User.findByIdAndUpdate(req.body.id, data, function (err, data) {
-    if (err) {
-      console.log(err.mesage);
-    } else {
-      res.send("done updated user");
-      console.log("Updated User : ", data);
-    }
-  });
+  );
 };
 
 exports.viewProfile = async (req, res, next) => {
@@ -242,3 +252,12 @@ exports.usersDataById = async (req, res) => {
 //     return res.json({ error: "something went wrong" });
 //   }
 // };
+exports.updateProfilee = async (req, res) => {
+  //console.log(req.params.id);
+ // res.send(req.params.id);
+  console.log(req.params.firstName);
+  res.send(req.body.firstName)
+  console.log("done1");
+
+ 
+};

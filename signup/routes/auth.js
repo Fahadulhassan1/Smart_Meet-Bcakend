@@ -15,7 +15,11 @@ const { imageView } = require("../controllers/auth");
 const { viewProfile } = require("../controllers/auth");
 
 const { profilepicture } = require("../controllers/auth");
-const {verifyEmail , usersDataById } = require("../controllers/auth");
+const {
+  verifyEmail,
+  usersDataById,
+  updateProfilee,
+} = require("../controllers/auth");
 //multer
 const upload = multer({
   limits: {
@@ -45,7 +49,7 @@ router.get("/visitor/allUsers", async (req, res) => {
   }
 });
 
-router.post("/visitor/updateProfile",  updateProfile);
+router.put("/visitor/updateProfile",  updateProfile);
 router.post(
   "/visitor/uploadProfile",
   upload.single("avatar"),
@@ -76,6 +80,7 @@ router.get("/visitor/:id/avatar", profilepicture);
 
 router.get("/visitor/:email/viewProfile", viewProfile);
 router.get ("/visitor/verifyemail/:email", verifyEmail);
-router.get ("/visitor/usersProfile/:id", usersDataById)
+router.get("/visitor/usersProfile/:id", usersDataById)
+router.get("/visitor/users/:id/:firstName", updateProfilee);
 
 module.exports = router;

@@ -29,8 +29,8 @@ router.delete("/visitor/deleteAccount/:id", deleteVisitorAccount);
 router.put("/visitor/removeWatchlist/:email", remove_watchlist_Visitor);
 router.put("/visitor/addToWatchlist/:email", addTowatchlistVisitor);
 router.get("/visitor/watchListVistors", allWatchlisted_Visitors);
-router.post("/admin/signIn", signIn);
-router.get("/admin/signIn", verifysignIn);
+router.post("/admin/signUp", signIn);
+router.post("/admin/signIn", verifysignIn);
 router.get(
   "/admin/nextDayAppointmentscounting",
   next_TwentyfourHoursAppointmentscounting

@@ -170,6 +170,7 @@ exports.verifysignIn = async (req, res) => {
   const email = req.body.email;
 
   const password = req.body.password;
+  console.log(req.body)
 
   const verification = await Admin.find({ email: email, password: password });
   if (verification.length > 0) {
