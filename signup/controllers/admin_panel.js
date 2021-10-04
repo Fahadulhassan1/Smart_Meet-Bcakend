@@ -173,9 +173,11 @@ exports.verifysignIn = async (req, res) => {
 
   const verification = await Admin.find({ email: email, password: password });
   if (verification.length > 0) {
-    res.send(verification);
+    res.json({verification, success: true});
   } else {
-    res.json("Invalid credentials");
+    res.json({
+      success: false,
+    });
   }
 };
 
