@@ -108,11 +108,7 @@ exports.updateProfile = async (req, res) => {
       var lastNa = await User.findById(id);
       lastName = lastNa.lastName;
     }
-  
-    
-  
 
-  
     // var data = {
     //   firstName: req.body.firstName,
     //   lastName: req.body.lastName,
@@ -138,7 +134,7 @@ exports.updateProfile = async (req, res) => {
       }
     );
   } catch (e) {
-    res.json(err);
+    res.json(e);
   }
 };
 
