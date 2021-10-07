@@ -92,21 +92,22 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log(req.body.id);
-  var { id, firstName, lastName, avatar } = req.body;
-  console.log(id);
-  console.log(lastName)
-  if (avatar === undefined || avatar === null || avatar == "") {
-    var avat = await User.findById(id);
-    avatar = avat.avatar;
-  }
-   if (firstName === undefined || firstName === null || firstName == "") {
-     var firstNa = await User.findById(id );
-     firstName = firstNa.firstName;
-   }
-   if (lastName === undefined || lastName === null|| lastName == "") {
-     var lastNa = await User.findById(id);
-    lastName = lastNa.lastName;
-  }
+  try {
+    var { id, firstName, lastName, avatar } = req.body;
+    console.log(id);
+    console.log(lastName)
+    if (avatar === undefined || avatar === null || avatar == "") {
+      var avat = await User.findById(id);
+      avatar = avat.avatar;
+    }
+    if (firstName === undefined || firstName === null || firstName == "") {
+      var firstNa = await User.findById(id);
+      firstName = firstNa.firstName;
+    }
+    if (lastName === undefined || lastName === null || lastName == "") {
+      var lastNa = await User.findById(id);
+      lastName = lastNa.lastName;
+    }
   
     
   
@@ -118,24 +119,27 @@ exports.updateProfile = async (req, res) => {
 
     //   avatar: req.body.avatar,
     // };
-  //console.log(data)
+    //console.log(data)
 
-  var update =await User.findByIdAndUpdate(
-    { _id: id },
-    {
-      firstName: firstName,
-      lastName: lastName,
-      avatar: avatar,
-    },
-    function (err, data) {
-      if (err) {
-        console.log(err.mesage);
-      } else {
-        res.send("done updated user");
-        console.log("Updated User : ", data);
+    var update = await User.findByIdAndUpdate(
+      { _id: id },
+      {
+        firstName: firstName,
+        lastName: lastName,
+        avatar: avatar,
+      },
+      function (err, data) {
+        if (err) {
+          console.log(err.mesage);
+        } else {
+          res.send("done updated user");
+          console.log("Updated User : ", data);
+        }
       }
-    }
-  );
+    );
+  } catch (e) {
+    res.json(err);
+  }
 };
 
 exports.viewProfile = async (req, res, next) => {
