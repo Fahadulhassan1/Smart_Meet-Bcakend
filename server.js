@@ -1,17 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-require("./signup/db/connectDB");
+require("./smartMeet/db/connectDB");
 const app = express();
 const fs = require("fs");
 
 //import routes
-const authRoutes = require("./signup/routes/auth");
-const EmployeeAuthRoutes = require("./signup/routes/employeAuth");
-const AppointmentRoutes = require("./signup/routes/appointment");
-const Employee_LocationRoutes = require("./signup/routes/employee_Location");
-const Admin_PanelRoutes = require("./signup/routes/admin_panel");
-const Ocr = require("./signup/routes/ocr");
+const authRoutes = require("./smartMeet/routes/auth");
+const EmployeeAuthRoutes = require("./smartMeet/routes/employeAuth");
+const AppointmentRoutes = require("./smartMeet/routes/appointment");
+const Employee_LocationRoutes = require("./smartMeet/routes/employee_Location");
+const Admin_PanelRoutes = require("./smartMeet/routes/admin_panel");
+const Ocr = require("./smartMeet/routes/ocr");
 app.use(express.json());
 
 app.use(cors());
