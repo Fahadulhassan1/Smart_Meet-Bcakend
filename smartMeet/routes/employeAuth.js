@@ -36,7 +36,7 @@ const upload = multer({
 router.post("/employee/signup",signup);
 router.post("/employee/signin", signin);
 // router.post("/email-activate", activateAccount);
-router.put("/forgetPassword", forgetPassword);
+router.put("/employee/forgetPassword", forgetPassword);
 router.get("/employee/allUsers", async (req, res) => {
   try {
     const users = await Employee.find({
@@ -47,6 +47,7 @@ router.get("/employee/allUsers", async (req, res) => {
     res.status(500).send(e);
   }
 });
+//added check
 
 router.put("/employee/updateProfile",  updateProfile);
 
