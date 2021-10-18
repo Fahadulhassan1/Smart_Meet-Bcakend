@@ -190,6 +190,8 @@ exports.acceptAppointments = async (req, res) => {
 exports.acceptedAppointments = async function (req, res) {
   const visitor = new ObjectId(req.params.VisitorId);
   console.log(visitor);
+  const date = Date.now();
+
   const accepted_requests = await Appointment.find({ VisitorId: visitor });
 
   if (accepted_requests.length == 0) {
@@ -198,7 +200,7 @@ exports.acceptedAppointments = async function (req, res) {
   const result = accepted_requests;
   const dataToSend = [];
   result.forEach((data) => {
-    if (data.AppointmentAccepted) {
+    if (data.AppointmentAccepted  && data.Date > date) {
       dataToSend.push({
         AppointmentAccepted: data.AppointmentAccepted,
         _id: data._id,
