@@ -16,6 +16,8 @@ const {
   verifysignIn,
   next_TwentyfourHoursAppointmentscounting,
   next_TwentyfourHoursAppointments,
+  forgetPassword,
+  addnewPassword,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -39,4 +41,10 @@ router.get(
   "/admin/nextDayAppointments",
   next_TwentyfourHoursAppointments
 );
+//forget password api address
+router.post("/admin/forgetPassword", forgetPassword);
+
+//add new password api address
+router.put("/admin/addnewPassword", addnewPassword);
+
 module.exports = router;

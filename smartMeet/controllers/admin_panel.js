@@ -7,7 +7,7 @@ var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
 var ObjectId = require("mongoose").Types.ObjectId;
-// var nodemailer = require("nodemailer");
+ var nodemailer = require("nodemailer");
 const _ = require("lodash");
 
 const { rawListeners } = require("../model/user");
@@ -219,3 +219,85 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
 
   res.json(appointments);
 };
+
+//forget password api call
+exports.forgetPassword = function (req, res, next) {
+  
+  var email = req.body.email;
+  console.log(email);
+  Admin.findOne({ email }, (err, admin) => {
+    if (err || !admin) {
+      return res.send({ error: "no account" });
+    }
+    var token = jwt.sign({ id: admin._id }, "secret", {
+      expiresIn: "24h",
+    });
+    admin.resetPasswordToken = token;
+    admin.resetPasswordExpires = Date.now() + 86400000;
+    admin.save(function (err) {
+      if (err) {
+        return res.send({ error: "cannot send mail" });
+      } else {
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "fahad.khalid01234@gmail.com",
+            pass: "Khalid@0347",
+          },
+        });
+        var mailOptions = {
+          from: "noreply@smartmeet.com",
+
+          to: email,
+          subject: "Reset Password",
+          text:
+            "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+            "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
+            "http://" +
+            req.headers.host +
+            "/reset/" +
+            token +
+            "\n\n" +
+            "If you did not request this, please ignore this email and your password will remain unchanged.\n",
+        };
+        transporter.sendMail(mailOptions, function (err) {
+          if (err) {
+            return res.send({ error: err});
+          } else {
+            return res.send({ message: "mail sent" });
+          }
+        });
+      }
+    });
+  });
+}
+  
+//cadd new password 
+exports.addnewPassword = function (req, res) {
+  var token = req.body.token;
+  var password = req.body.password;
+  Admin.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  }).exec(function (err, admin) {
+    if (err) {
+      return res.send({ error: "cannot reset password" });
+    } else if (!admin) {
+      return res.send({ error: "password reset token is invalid or has expired" });
+    } else {
+      admin.password = password;
+      admin.resetPasswordToken = undefined;
+      admin.resetPasswordExpires = undefined;
+      admin.save(function (err) {
+        if (err) {
+          return res.send({ error: "cannot reset password" });
+        } else {
+          return res.send({ message: "password reset successfull" });
+        }
+      });
+    }
+  });
+}
+
+    
+    
