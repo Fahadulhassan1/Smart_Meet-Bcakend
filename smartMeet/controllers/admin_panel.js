@@ -262,7 +262,7 @@ exports.forgetPassword = function (req, res, next) {
         };
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
-            return res.send({ message: err});
+            return res.send({ message: err.message});
           } else {
             return res.send({ message: "email has been sent to your given email" });
           }
