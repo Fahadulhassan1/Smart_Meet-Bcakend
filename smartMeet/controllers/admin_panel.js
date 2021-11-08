@@ -227,7 +227,7 @@ exports.forgetPassword = function (req, res, next) {
   console.log(email);
   Admin.findOne({ email }, (err, admin) => {
     if (err || !admin) {
-      return res.send({ error: "no account" });
+      return res.send({ message: "no account found please enter email correctly" });
     }
     var token = jwt.sign({ id: admin._id }, "secret", {
       expiresIn: "24h",
@@ -236,7 +236,7 @@ exports.forgetPassword = function (req, res, next) {
     admin.resetPasswordExpires = Date.now() + 86400000;
     admin.save(function (err) {
       if (err) {
-        return res.send({ error: "cannot send mail" });
+        return res.send({ message: "cannot send mail at this time" });
       } else {
         var transporter = nodemailer.createTransport({
           service: "gmail",
@@ -262,9 +262,9 @@ exports.forgetPassword = function (req, res, next) {
         };
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
-            return res.send({ error: err});
+            return res.send({ message: "error in sending mail, please try again later"});
           } else {
-            return res.send({ message: "mail sent" });
+            return res.send({ message: "email has been sent to your given email" });
           }
         });
       }
