@@ -254,15 +254,15 @@ exports.forgetPassword = function (req, res, next) {
             "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
             "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
             "http://" +
-            req.headers.host +
-            "/reset/" +
+            "localhost:3000" +
+            "/api/admin/addnewPassword/" +
             token +
             "\n\n" +
             "If you did not request this, please ignore this email and your password will remain unchanged.\n",
         };
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
-            return res.send({ message: "error in sending mail, please try again later"});
+            return res.send({ message: err});
           } else {
             return res.send({ message: "email has been sent to your given email" });
           }
@@ -272,9 +272,9 @@ exports.forgetPassword = function (req, res, next) {
   });
 }
   
-//cadd new password 
+//add new password 
 exports.addnewPassword = function (req, res) {
-  var token = req.body.token;
+  var token = req.params.token;
   var password = req.body.password;
   Admin.findOne({
     resetPasswordToken: token,
@@ -290,7 +290,7 @@ exports.addnewPassword = function (req, res) {
       admin.resetPasswordExpires = undefined;
       admin.save(function (err) {
         if (err) {
-          return res.send({ error: "cannot reset password" });
+          return res.send({ error: err });
         } else {
           return res.send({ message: "password reset successfull" });
         }
@@ -300,4 +300,5 @@ exports.addnewPassword = function (req, res) {
 }
 
     
-    
+//chat app
+

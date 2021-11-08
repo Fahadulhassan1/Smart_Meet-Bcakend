@@ -45,6 +45,6 @@ router.get(
 router.post("/admin/forgetPassword", forgetPassword);
 
 //add new password api address
-router.put("/admin/addnewPassword", addnewPassword);
+router.put("/admin/addnewPassword/:token", addnewPassword);
 
 module.exports = router;
