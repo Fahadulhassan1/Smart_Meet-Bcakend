@@ -262,7 +262,8 @@ exports.forgetPassword = function (req, res, next) {
         };
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
-            return res.send({ message: err.message});
+            return res.send({ message: "error in while sending because of heroku" });
+            
           } else {
             return res.send({ message: "email has been sent to your given email" });
           }
@@ -270,6 +271,7 @@ exports.forgetPassword = function (req, res, next) {
       }
     });
   });
+
 }
   
 //add new password 
@@ -300,5 +302,128 @@ exports.addnewPassword = function (req, res) {
 }
 
     
-//chat app
+//chat app on server side using websocket connection
+
+
+exports.chat = function (req, res) {
+  var io = req.app.get("socketio");
+  var socket = req.app.get("socket");
+  io.on("connection", function (socket) {
+    console.log("a user connected");
+    socket.on("chat", function (data) {
+      io.sockets.emit("chat", data);
+    });
+  });
+};
+
+//get report of last month appointments for admin
+
+exports.lastMonth = async (req , res) =>{
+  var currentDateobj = new Date();
+  var today = new Date();
+  var lastMonth = new Date(currentDateobj.getTime() - 1000 * 60 * 60 * 24 * 30);
+  const appointments =await Appointment.find({
+    $and: [
+      { Date: { $gt: lastMonth } },
+      { Date: { $lt: today } },
+      { AppointmentAccepted: true },
+    ],
+  });
+  var length = appointments.length;
+  console.log(length);
+  res.send(appointments);
+
+}
+
+exports.secondLastMonth = async (req, res) => {
+  var currentDateobj = new Date();
+  var today = new Date();
+  var lastMonth = new Date(currentDateobj.getTime() - 1000 * 60 * 60 * 24 * 30);
+  var secondLastMonth = new Date(lastMonth.getTime() - 1000 * 60 * 60 * 24 * 30);
+  const appointments = await Appointment.find({
+    $and: [
+      { Date: { $gt: secondLastMonth } },
+      { Date: { $lt: lastMonth } },
+      { AppointmentAccepted: true },
+    ],
+  });
+  var length = appointments.length;
+  console.log(length);
+  res.send(appointments);
+}
+//last seven days , day by day appointments
+exports.lastSevenDaysAppointments = async (req, res) => {
+  var currentDateobj = new Date();
+  var today = new Date();
+  const dayappointments = [];
+  for (var i = 1; i < 8; i++) {
+    var lastSevenDays = new Date(
+      currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
+    );
+     var appointments = await Appointment.find({
+       $and: [
+         { Date: { $gt: lastSevenDays } },
+         { Date: { $lt: today } },
+         { AppointmentAccepted: true },
+       ],
+     });
+    if (appointments.length == 0) {
+      dayappointments.push([0]);
+    } else {
+      dayappointments.push(appointments);
+    }
+    appointments = [];
+    today = lastSevenDays
+  }
+
+
+  
+  console.log(dayappointments);
+  res.send(dayappointments);
+}
+
+exports.lastSevenDaysAppointmentsCounting= async (req, res) => {
+  var currentDateobj = new Date();
+  var today = new Date();
+  const dayappointments = [];
+  for (var i = 1; i < 8; i++) {
+    var lastSevenDays = new Date(
+      currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
+    );
+    var appointments = await Appointment.find({
+      $and: [
+        { Date: { $gt: lastSevenDays } },
+        { Date: { $lt: today } },
+        { AppointmentAccepted: true },
+      ],
+      
+    });
+    if (appointments.length == 0) {
+      dayappointments.push(0);
+    } else {
+      dayappointments.push([Date, appointments.length]);
+    }
+    appointments = [];
+    today = lastSevenDays;
+  }
+
+  console.log(dayappointments);
+  res.send(dayappointments);
+};
+
+//get date and month of yesterday
+exports.yesterday = async (req, res) => {
+  var currentDateobj = new Date();
+  var today = new Date();
+  var yesterday = new Date(currentDateobj.getTime() - 1000 * 60 * 60 * 24);
+  var yesterdayDate = yesterday.getDate();
+  var yesterdayMonth = yesterday.getMonth() + 1;
+  var yesterdayYear = yesterday.getFullYear();
+  var yesterdayDateString =
+    yesterdayDate + "-" + yesterdayMonth + "-" + yesterdayYear;
+  console.log(yesterdayDateString);
+  res.send(yesterdayDateString);
+};
+
+
 

@@ -35,10 +35,11 @@ const upload = multer({
     },
   });
 
-router.post("/visitor/appointment",newAppointmentRequest )
+router.post("/visitor/appointment",newAppointmentRequest)
 router.get("/visitor/appointment",getAllAppointments )
 router.get("/visitor/:UserId/pendingappointment",pendingAppointments) 
 router.delete("/visitor/cancelAppointment/:id", cancelAppointment) 
+
 
 router.get("/employee/:employeeId/pendingappointmentrequests", receivedAppointment)
 router.get(

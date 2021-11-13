@@ -18,6 +18,10 @@ const {
   next_TwentyfourHoursAppointments,
   forgetPassword,
   addnewPassword,
+  lastMonth,
+  secondLastMonth,
+  lastSevenDaysAppointments,
+  lastSevenDaysAppointmentsCounting,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -47,4 +51,14 @@ router.post("/admin/forgetPassword", forgetPassword);
 //add new password api address
 router.put("/admin/addnewPassword/:token", addnewPassword);
 
+router.get("/admin/lastMonth", lastMonth);
+router.get("/admin/secondLastMonth", secondLastMonth);
+
+//last seven days , day by day appointments
+router.get("/admin/lastSevenDaysAppointments", lastSevenDaysAppointments);
+
+router.get(
+  "/admin/lastSevenDaysAppointmentsCounting",
+  lastSevenDaysAppointmentsCounting
+);
 module.exports = router;
