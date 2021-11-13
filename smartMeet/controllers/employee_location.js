@@ -22,7 +22,7 @@ exports.employee_Location = async (req, res) => {
       );
       if (update) {
         res.status(200).json({
-          message: "Employee Location Updated Successfully",
+          message: "Employee Location Updated Successfully"
          
         });
       }
@@ -35,7 +35,7 @@ exports.employee_Location = async (req, res) => {
       var save = await employee_Location.save();
       if (save) {
         res.status(200).json({
-          message: "Employee Location Saved Successfully",
+          message: "Employee Location Saved Successfully"
           
         });
       }
