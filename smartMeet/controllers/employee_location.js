@@ -23,7 +23,7 @@ exports.employee_Location = async (req, res) => {
       if (update) {
         res.status(200).json({
           message: "Employee Location Updated Successfully",
-          data: update
+         
         });
       }
     } else {
@@ -36,7 +36,7 @@ exports.employee_Location = async (req, res) => {
       if (save) {
         res.status(200).json({
           message: "Employee Location Saved Successfully",
-          data: save
+          
         });
       }
     }
