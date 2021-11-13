@@ -60,5 +60,5 @@ exports.getEmployee_Location = async (req, res) => {
 
     res.status(400).send(err);
   }
-  console.log(location);
+  
 };
