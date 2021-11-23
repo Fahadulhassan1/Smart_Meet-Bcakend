@@ -89,7 +89,7 @@ exports.pendingAppointments = async (req, res, next) => {
     const dataToSend = [];
     result.forEach((data) => {
       if (!data.AppointmentAccepted && ! data.isRejected) {
-        dataToSend.push({
+      dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected ,
           _id: data._id,

@@ -355,37 +355,99 @@ exports.secondLastMonth = async (req, res) => {
 exports.lastSevenDaysAppointments = async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
-  const dayappointments = [];
-  for (var i = 1; i < 8; i++) {
-    var lastSevenDays = new Date(
-      currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
-    );
-     var appointments = await Appointment.find({
-       $and: [
-         { Date: { $gt: lastSevenDays } },
-         { Date: { $lt: today } },
-         { AppointmentAccepted: true },
-       ],
-     });
-    if (appointments.length == 0) {
-      dayappointments.push([0]);
+  
+
+  const thisweek = [];
+  const lastweek = [];
+
+  for (let i = 0; i < 7; i++) {
+    currentDateobj.setDate(currentDateobj.getDate() - i-1);
+    today.setDate(today.getDate() - i);
+    
+  //  console.log("current " + currentDateobj);
+    //console.log("todsay " + today);
+       var appointments = await Appointment.find({
+         $and: [
+           { Date: { $gt: currentDateobj } },
+           { Date: { $lt: today } },
+           { AppointmentAccepted: true },
+         ],
+       });
+    if (appointments.length > 0) {
+      var length = appointments.length;
+      thisweek.push({ length: length, today : today.toDateString().slice(0,3) });
     } else {
-      dayappointments.push(appointments);
+      thisweek.push({ length: 0, today : today.toDateString().slice(0,3) });
     }
-    appointments = [];
-    today = lastSevenDays
+    today = new Date();
+    currentDateobj = new Date();
   }
+
+/////////////////////////////////
+  var currentDateobj30 = new Date();
+  var today30 = new Date();
+
+  
+
+  for (let i = 7; i < 14; i++) {
+    currentDateobj30.setDate(currentDateobj30.getDate() - i - 1);
+    today30.setDate(today30.getDate() - i);
+
+    console.log("current" + currentDateobj30);
+  //  console.log(today30);
+    var appointments = await Appointment.find({
+      $and: [
+        { Date: { $gt: currentDateobj30 } },
+        { Date: { $lt: today30 } },
+        { AppointmentAccepted: true },
+      ],
+    });
+    if (appointments.length > 0) {
+      var length = appointments.length;
+      lastweek.push({ length : length, today30 : today30.toDateString().slice(0,3) });
+    } else {
+      lastweek.push({ length: 0, today30: today30.toDateString().slice(0,3) });
+    }
+    today30 = new Date();
+    currentDateobj30 = new Date();
+  }
+
+  console.log(lastweek);
+
+  res.send({lastweek,thisweek});
+  // for (var i = 0; i < 7; i++) {
+  //   var lastSevenDays = new Date(
+  //     currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
+  //   );
+  //    var appointments = await Appointment.find({
+  //      $and: [
+  //        { Date: { $gt: lastSevenDays } },
+  //        { Date: { $lt: today } },
+  //        { AppointmentAccepted: true },
+  //      ],
+  //    });
+  //   currentDateobj.setDate(currentDateobj.getDate() - i);
+  //   if (appointments.length == 0) {
+
+  //     last7days.push([0], currentDateobj.getDate() +"/"+ currentDateobj.getMonth() );
+  //   } else {
+  //     last7days.push(appointments, currentDateobj.getDate()+"/"+ currentDateobj.getMonth() );
+  //   }
+  //   currentDateobj = new Date();
+  //   appointments = [];
+  //   today = lastSevenDays
+  // }
 
 
   
-  console.log(dayappointments);
-  res.send(dayappointments);
+  // console.log(last7days);
+  // res.json(last7days);
 }
 
 exports.lastSevenDaysAppointmentsCounting= async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
-  const dayappointments = [];
+  const last7days = [];
   for (var i = 1; i < 8; i++) {
     var lastSevenDays = new Date(
       currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
@@ -399,16 +461,16 @@ exports.lastSevenDaysAppointmentsCounting= async (req, res) => {
       
     });
     if (appointments.length == 0) {
-      dayappointments.push(0);
+      last7days.push(0);
     } else {
-      dayappointments.push([Date, appointments.length]);
+      last7days.push([Date, appointments.length]);
     }
     appointments = [];
     today = lastSevenDays;
   }
 
-  console.log(dayappointments);
-  res.send(dayappointments);
+  console.log(last7days);
+  res.send(last7days);
 };
 
 //get date and month of yesterday
@@ -424,6 +486,29 @@ exports.yesterday = async (req, res) => {
   console.log(yesterdayDateString);
   res.send(yesterdayDateString);
 };
+
+exports.thisandlastmonth = function (res, res) {
+  var date = new Date();
+  var nextDate = new Date();
+  const sevenDays = []
+  for (var i = 0; i < 7; i++) {
+    console.log(i);
+
+    date.setDate(date.getDate() - i);
+    nextDate.setDate(nextDate.getDate() - i-1);
+    console.log("date is " + date);
+    console.log("next date is " + nextDate);
+    date = new Date();
+    nextDate = new Date();
+
+ 
+   
+  }
+res.send("done")
+ 
+};
+
+
 
 
 

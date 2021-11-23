@@ -22,6 +22,7 @@ const {
   secondLastMonth,
   lastSevenDaysAppointments,
   lastSevenDaysAppointmentsCounting,
+  thisandlastmonth,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -61,4 +62,5 @@ router.get(
   "/admin/lastSevenDaysAppointmentsCounting",
   lastSevenDaysAppointmentsCounting
 );
+router.get("/thisandlastmonth", thisandlastmonth);
 module.exports = router;
