@@ -24,11 +24,7 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
     avatar,
   } = req.body;
 
-  const appointments = await RunInAppointment.find({
-    employeeId: employeeId,
-    date: date,
-    timeslot: timeslot,
-  });
+  
     
     
 
