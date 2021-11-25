@@ -508,7 +508,36 @@ res.send("done")
  
 };
 
+exports.Appointments = async function (req, res) {
+  var appointments = await Appointment.find()
+    .populate("VisitorId")
+    .populate("employeeId");
 
+  var appointmentsData = [];
+  appointments.forEach((appointment) => {
+    
+
+    appointmentsData.push({
+      AppointementAccepted: appointment.AppointmentAccepted,
+      isRejected: appointment.isRejected,
+      authorize: appointment.employeeId.authorize,
+      employeeName: appointment.employeeId.firstName + ' ' + appointment.employeeId.lastName,
+      Employee_email: appointment.employeeId.email,
+      employeeAvatar: appointment.employeeId.avatar,
+      isWatchListed: appointment.VisitorId.isWatchListed,
+      VisitorName: appointment.VisitorId.firstName + ' ' + appointment.VisitorId.lastName,
+      visitorEmail: appointment.VisitorId.email,
+      visitorAvatar: appointment.VisitorId.avatar,
+      VisitorComapany: appointment.CompanyName,
+      Date: appointment.Date,
+      Timeslot: appointment.Timeslot,
+      Message : appointment.Message,
+    });
+  });
+   //res.send(appointments);
+
+  res.send(appointmentsData);
+}
 
 
 
