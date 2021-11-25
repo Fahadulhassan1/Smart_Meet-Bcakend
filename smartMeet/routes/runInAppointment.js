@@ -57,4 +57,13 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
   }
 });
 
+router.get('/visitor/runInappointment',async (req, res) => {
+   try {
+     const appointements = await RunInAppointment.find({}).populate('employeeId');
+     res.send(appointements);
+   } catch (e) {
+     res.status(500).send(e);
+   }
+})
+
 module.exports = router;
