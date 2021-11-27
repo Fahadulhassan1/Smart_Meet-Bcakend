@@ -520,7 +520,6 @@ exports.Appointments = async function (req, res) {
     appointmentsData.push({
       AppointementAccepted: appointment.AppointmentAccepted,
       isRejected: appointment.isRejected,
-      authorize: appointment.employeeId.authorize,
       employeeName: appointment.employeeId.firstName + ' ' + appointment.employeeId.lastName,
       Employee_email: appointment.employeeId.email,
       employeeAvatar: appointment.employeeId.avatar,
