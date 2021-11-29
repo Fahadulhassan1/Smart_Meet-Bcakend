@@ -35,6 +35,10 @@ const appointmentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isUrgent: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -40,6 +40,18 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    isRejected: {
+      type: Boolean,
+      default: false,
+    },
+    isUrgent: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

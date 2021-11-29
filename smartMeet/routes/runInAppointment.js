@@ -23,6 +23,7 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
       message,
       avatar,
     } = req.body;
+    
 
     
       let AppointmentRequest = new RunInAppointment({
@@ -35,6 +36,7 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
         timeslot,
         message,
         avatar,
+        
       });
       AppointmentRequest.save((err, sucess) => {
         if (err) {
@@ -48,6 +50,7 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
     return res.status(500).json({ error: error });
   }
 });
+
 
 router.get("/visitor/runInappointment", async (req, res) => {
   try {

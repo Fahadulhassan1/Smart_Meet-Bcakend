@@ -220,6 +220,73 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
   res.json(appointments);
 };
 
+// //send otp throgh email to the visitor for signUp
+
+// exports.sendOTP = async (req, res) => {
+//   const email = req.body.email;
+//   const otp = Math.floor(100000 + Math.random() * 900000);
+//   console.log(otp);
+//   const visitor = await Visitor.findOne({ email });
+//   if (!visitor) {
+//     return res.send({ error: "no visitor found" });
+//   }
+//   const obj = {
+//     OTP: otp,
+//   };
+//   visitor = _.extend(visitor, obj);
+//   visitor.save((err, result) => {
+//     if (err) {
+//       return res.send({ error: "cannot send otp currently" });
+//     } else {
+//       const transporter = nodemailer.createTransport({
+//         service: "gmail",
+//         auth: {
+//           user: "fahad.khalid01234@gmail.com",
+//           pass: "fahad12345",
+//         },
+//       });
+//       const mailOptions = {
+//         from: "fahad.khalid01234@gmail.com",
+//         to: email,
+//         subject: "OTP",
+//         text: "Your OTP is " + otp,
+//       };
+//       transporter.sendMail(mailOptions, function (error, info) {
+//         if (error) {
+//           console.log(error);
+//         } else {
+//           console.log("Email sent: " + info.response);
+//         }
+//       });
+//       return res.send({ message: "otp sent" });
+//     }
+//   });
+// };
+// //verify otp throgh email
+// exports.verifyOTP = async (req, res) => {
+//   const email = req.body.email;
+//   const otp = req.body.otp;
+//   const visitor = await Visitor.findOne({ email });
+//   if (!visitor) {
+//     return res.send({ error: "no visitor found" });
+//   }
+//   if (visitor.OTP == otp) {
+//     const obj = {
+//       isVerified: true,
+//     };
+//     visitor = _.extend(visitor, obj);
+//     visitor.save((err, result) => {
+//       if (err) {
+//         return res.send({ error: "cannot verify otp currently" });
+//       } else {
+//         return res.send({ message: "otp verified" });
+//       }
+//     });
+//   } else {
+//     return res.send({ error: "otp not verified" });
+//   }
+// };
+
 //forget password api call
 exports.forgetPassword = function (req, res, next) {
   

@@ -1,6 +1,8 @@
 const User = require("../model/user");
 const Employee = require("../model/employee");
 const Appointment = require("../model/appointment");
+const RunInAppointment = require("../model/runInAppointment");
+
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
@@ -55,7 +57,8 @@ exports.newAppointmentRequest = async (req, res, next) => {
       Date,
       Timeslot,
       Message,
-     // avatar,
+     
+      // avatar,
     });
     AppointmentRequest.save((err, sucess) => {
       if (err) {
@@ -139,8 +142,32 @@ exports.receivedAppointment = async (req, res) => {
     if (pending_Appointments_request.length == 0) {
       return res.status(399).send({ message: "No pending Appointment Requests" });
     }
-     
-    // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+    const runInAppointment_requests = await RunInAppointment.find({
+      employeeId: user,
+    });
+    const runIndataToSend = [];
+    runInAppointment_requests.forEach((data) => {
+      if (!data.isAccepted && !data.isRejected) {
+        runIndataToSend.push({
+          isAccepted: data.isAccepted,
+          isRejected: data.isRejected,
+          _id: data._id,
+          employeeId: data.employeeId,
+          visitorName: data.visitorName,
+          visitorEmail: data.visitorEmail,
+          visitorPhone: data.visitorPhone,
+          companyName: data.companyName,
+          date: data.date,
+          timeslot: data.timeslot,
+          message: data.message,
+          avatar: data.avatar,
+          isUrgent: data.isUrgent,
+        });
+      }
+    });
+
+
+  
     const result = pending_Appointments_request;
     const dataToSend = [];
     result.forEach((data) => {
@@ -156,10 +183,14 @@ exports.receivedAppointment = async (req, res) => {
           Date: data.Date,
           Timeslot: data.Timeslot,
           Message: data.Message,
+          isUrgent: data.isUrgent,
         });
       }
     });
-    res.send(dataToSend);
+    const array3 = [runIndataToSend, dataToSend];
+    // array3 = dataToSend + runIndataToSend;
+   // Array.prototype.push.apply(dataToSend, runIndataToSend);
+    res.send(array3);
   } catch (e) {
     return res.status(399).send({ error: "error exists" });
   }
