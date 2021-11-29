@@ -11,17 +11,6 @@ var nodemailer = require("nodemailer");
 const _ = require("lodash");
 const { rawListeners } = require("../model/user");
 
-// exports.getslots = async (req , res) => {
-//     const {employeeId , visitorId  , date } = req.body;
-//     const ts = ['10:00-10:30','10:30-11:00','11:00-11:30','11:30-12:00','12:00-12:30','12:30-13:00','13:00-13:30','13:30-14:00','14:00-14:30','14:30-15:00','15:00-15:30','15:30-16:00'];
-//     const bookedAppoitments = [];
-//    db.collection('appointment').find({employeeId : employeeId}).toArray(function (err, result) {
-//     if (err) throw err;
-//     console.log(result);
-//     db.close();
-//    });
-// }
-
 exports.newAppointmentRequest = async (req, res, next) => {
   // const ts = ['10:00-10:30','10:30-11:00','11:00-11:30','11:30-12:00','12:00-12:30','12:30-13:00','13:00-13:30','13:30-14:00','14:00-14:30','14:30-15:00','15:00-15:30','15:30-16:00'];
   console.log("done");
@@ -41,9 +30,8 @@ exports.newAppointmentRequest = async (req, res, next) => {
     VisitorId: VisitorId,
     Date: Date,
     Timeslot: Timeslot,
-    
   });
- 
+
   if (appointments.length > 0 && appointments[0].isRejected) {
     return res.send({
       error: "you already booked Appointment on this time slot",
@@ -57,7 +45,7 @@ exports.newAppointmentRequest = async (req, res, next) => {
       Date,
       Timeslot,
       Message,
-     
+
       // avatar,
     });
     AppointmentRequest.save((err, sucess) => {
@@ -84,17 +72,19 @@ exports.pendingAppointments = async (req, res, next) => {
     const pendingAppointments = await Appointment.find({ VisitorId: user });
 
     if (pendingAppointments.length == 0) {
-      return res.status(399).send({ message: "No pending Appointment Requests" });
+      return res
+        .status(399)
+        .send({ message: "No pending Appointment Requests" });
     }
 
     // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
     const result = pendingAppointments;
     const dataToSend = [];
     result.forEach((data) => {
-      if (!data.AppointmentAccepted && ! data.isRejected) {
-      dataToSend.push({
+      if (!data.AppointmentAccepted && !data.isRejected) {
+        dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
-          isRejected: data.isRejected ,
+          isRejected: data.isRejected,
           _id: data._id,
           employeeId: data.employeeId,
           VisitorId: data.VisitorId,
@@ -107,10 +97,9 @@ exports.pendingAppointments = async (req, res, next) => {
       }
     });
     if (dataToSend.length > 0) {
-
-    res.send(dataToSend);
-    } else{
-      res.status(399).send({message : "no pending request"});
+      res.send(dataToSend);
+    } else {
+      res.status(399).send({ message: "no pending request" });
     }
   } catch (e) {
     return res.status(400).send({ error: "error exists" });
@@ -134,13 +123,16 @@ exports.cancelAppointment = async (req, res) => {
 exports.receivedAppointment = async (req, res) => {
   try {
     const user = new ObjectId(req.params.employeeId);
-    
+
     const pending_Appointments_request = await Appointment.find({
       employeeId: user,
     });
+    var runInpendings = await RunInAppointment.find({ employeeId: user });
 
-    if (pending_Appointments_request.length == 0) {
-      return res.status(399).send({ message: "No pending Appointment Requests" });
+    if (pending_Appointments_request.length == 0 && runInpendings.length == 0) {
+      return res
+        .status(399)
+        .send({ message: "No pending Appointment Requests" });
     }
     const runInAppointment_requests = await RunInAppointment.find({
       employeeId: user,
@@ -166,15 +158,13 @@ exports.receivedAppointment = async (req, res) => {
       }
     });
 
-
-  
     const result = pending_Appointments_request;
     const dataToSend = [];
     result.forEach((data) => {
-      if (!data.AppointmentAccepted && !data.isRejected ) {
+      if (!data.AppointmentAccepted && !data.isRejected) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
-          isRejected : data.isRejected , 
+          isRejected: data.isRejected,
           _id: data._id,
           employeeId: data.employeeId,
           VisitorId: data.VisitorId,
@@ -189,7 +179,7 @@ exports.receivedAppointment = async (req, res) => {
     });
     const array3 = [runIndataToSend, dataToSend];
     // array3 = dataToSend + runIndataToSend;
-   // Array.prototype.push.apply(dataToSend, runIndataToSend);
+    // Array.prototype.push.apply(dataToSend, runIndataToSend);
     res.send(array3);
   } catch (e) {
     return res.status(399).send({ error: "error exists" });
@@ -197,26 +187,48 @@ exports.receivedAppointment = async (req, res) => {
 };
 exports.acceptAppointments = async (req, res) => {
   const _id = req.params.id;
-  console.log(_id);
+  // console.log(_id);
   var accept = true;
-  await Appointment.findOne({ _id }, (err, user) => {
-    if (err || !user) {
-      return res.send({ error: "no appointment found" });
-    }
-    const obj = {
-      AppointmentAccepted: accept,
-    };
-    user = _.extend(user, obj);
-    user.save((err, result) => {
-      if (err) {
-        return res.send({ error: "cannot accept currently" });
-      } else {
-        return res
-          .status(200)
-          .send({ message: "appointment request accepted" });
+  
+  if (Appointment.findById(_id)) {
+    await Appointment.findOne({ _id }, (err, user) => {
+      if (err || !user) {
+        return res.send({ error: "no appointment found" });
       }
+      const obj = {
+        AppointmentAccepted: accept,
+      };
+      user = _.extend(user, obj);
+      user.save((err, result) => {
+        if (err) {
+          return res.send({ error: "cannot accept currently" });
+        } else {
+          return res
+            .status(200)
+            .send({ message: "appointment request accepted" });
+        }
+      });
     });
-  });
+  } else {
+    await RunInAppointment.findOne({ _id }, (err, user) => {
+      if (err || !user) {
+        return res.send({ error: "no appointment found" });
+      }
+      const obj = {
+        isAccepted: accept,
+      };
+      user = _.extend(user, obj);
+      user.save((err, result) => {
+        if (err) {
+          return res.send({ error: "cannot accept currently" });
+        } else {
+          return res
+            .status(200)
+            .send({ message: "appointment request accepted" });
+        }
+      });
+    });
+  }
 };
 exports.acceptedAppointments = async function (req, res) {
   const visitor = new ObjectId(req.params.VisitorId);
@@ -226,12 +238,14 @@ exports.acceptedAppointments = async function (req, res) {
   const accepted_requests = await Appointment.find({ VisitorId: visitor });
 
   if (accepted_requests.length == 0) {
-    return res.status(399).send({ message: "No accepted Appointment Requests" });
+    return res
+      .status(399)
+      .send({ message: "No accepted Appointment Requests" });
   }
   const result = accepted_requests;
   const dataToSend = [];
   result.forEach((data) => {
-    if (data.AppointmentAccepted  && data.Date > date) {
+    if (data.AppointmentAccepted && data.Date > date) {
       dataToSend.push({
         AppointmentAccepted: data.AppointmentAccepted,
         _id: data._id,
@@ -245,10 +259,10 @@ exports.acceptedAppointments = async function (req, res) {
       });
     }
   });
-  if(dataToSend.length> 0) {
-  return res.send(dataToSend);
-  } else{
-    return res.status(399).send({message : "no accepted request"});
+  if (dataToSend.length > 0) {
+    return res.send(dataToSend);
+  } else {
+    return res.status(399).send({ message: "no accepted request" });
   }
 };
 
@@ -275,10 +289,10 @@ exports.searchEmployees = async (req, res) => {
           $or: [
             { firstName: { $regex: new RegExp(name, "i") } },
             { lastName: { $regex: new RegExp(name, "i") } },
-          ]
-        }, { authorize: true }
-      ]
-      
+          ],
+        },
+        { authorize: true },
+      ],
     });
     if (names.length > 0) {
       return res.status(200).send(names);
@@ -290,35 +304,58 @@ exports.searchEmployees = async (req, res) => {
   }
 };
 
-exports.reject_Appointment = async (req, res) =>  {
+exports.reject_Appointment = async (req, res) => {
   const _id = req.params.id;
   console.log(_id);
   var accept = true;
-  await Appointment.findOne({ _id }, (err, user) => {
-    if (err || !user) {
-      return res.send({ error: "no appointment found" });
-    }
-    const obj = {
-      isRejected: accept,
-      AppointmentAccepted: false
-    };
-    user = _.extend(user, obj);
-    user.save((err, result) => {
-      if (err) {
-        return res.send({ error: "cannot reject currently" });
-      } else {
-        return res
-          .status(200)
-          .send({ message: "appointment rejected sucessfully" });
+  if (Appointment.findById(_id)) {
+    await Appointment.findOne({ _id }, (err, user) => {
+      if (err || !user) {
+        return res.send({ error: "no appointment found" });
       }
+      const obj = {
+        isRejected: accept,
+        AppointmentAccepted: false,
+      };
+      user = _.extend(user, obj);
+      user.save((err, result) => {
+        if (err) {
+          return res.send({ error: "cannot reject currently" });
+        } else {
+          return res
+            .status(200)
+            .send({ message: "appointment rejected sucessfully" });
+        }
+      });
     });
-  });
-}
+  } else {
+    await RunInAppointment.findOne({ _id }, (err, user) => {
+      if (err || !user) {
+        return res.send({ error: "no appointment found" });
+      }
+      const obj = {
+        isRejected: accept,
+        AppointmentAccepted: false,
+      };
+      user = _.extend(user, obj);
+      user.save((err, result) => {
+        if (err) {
+          return res.send({ error: "cannot reject currently" });
+        } else {
+          return res
+            .status(200)
+            .send({ message: "appointment rejected sucessfully" });
+        }
+      });
+    });
+  }
+};
 
 exports.rejected_Appointments = async (req, res) => {
   const visitor = new ObjectId(req.params.VisitorId);
   console.log(visitor);
   const accepted_requests = await Appointment.find({ VisitorId: visitor });
+  
 
   if (accepted_requests.length == 0) {
     return res.send({ message: "No Rejected Appointment Requests" });
@@ -326,7 +363,7 @@ exports.rejected_Appointments = async (req, res) => {
   const result = accepted_requests;
   const dataToSend = [];
   result.forEach((data) => {
-    if (data.isRejected ) {
+    if (data.isRejected) {
       dataToSend.push({
         AppointmentAccepted: data.AppointmentAccepted,
         _id: data._id,
@@ -340,12 +377,12 @@ exports.rejected_Appointments = async (req, res) => {
       });
     }
   });
-  if(dataToSend.length> 0) {
-  return res.send(dataToSend);
-  } else{
-    return res.send({message : "no rejected Appointments"});
+  if (dataToSend.length > 0) {
+    return res.send(dataToSend);
+  } else {
+    return res.send({ message: "no rejected Appointments" });
   }
-}
+};
 
 exports.hostAcceptedAppointments = async (req, res) => {
   try {
@@ -354,12 +391,15 @@ exports.hostAcceptedAppointments = async (req, res) => {
     const pending_Appointments_request = await Appointment.find({
       employeeId: user,
     });
+    const pending_Appointments_request1 = await RunInAppointment.find({
+      employeeId: user,
+    });
 
-    if (pending_Appointments_request.length == 0) {
+    if (pending_Appointments_request.length == 0 && pending_Appointments_request1.length == 0) {
       return res.status(399).send({ message: "No accepted Appointments" });
     }
     var date = new Date();
-    // let x = pendingAppointments.filter((a)=>{if( a.AppointmentAccepted == false){return res.send(a)}});
+
     const result = pending_Appointments_request;
     const dataToSend = [];
 
@@ -376,10 +416,31 @@ exports.hostAcceptedAppointments = async (req, res) => {
           Date: data.Date,
           Timeslot: data.Timeslot,
           Message: data.Message,
+          isUrgent: data.isUrgent,
         });
       }
     });
-    res.send(dataToSend);
+    var dataToSend1 = [];
+    pending_Appointments_request1.forEach((data) => {
+      if (data.AppointmentAccepted && data.date > date) {
+        dataToSend1.push({
+          isAccepted: data.AppointmentAccepted,
+          isRejected: data.isRejected,
+          _id: data._id,
+          employeeId: data.employeeId,
+          visitorName: data.visitorName,
+          visitorEmail: data.visitorEmail,
+          visitorPhone: data.visitorPhone,
+          companyName: data.companyName,
+          date: data.date,
+          timeslot: data.timeslot,
+          message: data.message,
+          isUrgent: data.isUrgent,
+        });
+      }
+    })
+    var concat2arrrays = [dataToSend1 , dataToSend]
+    res.send(concat2arrrays);
   } catch (e) {
     return res.status(399).send({ error: "error exists" });
   }
