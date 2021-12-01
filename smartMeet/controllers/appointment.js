@@ -122,10 +122,10 @@ exports.cancelAppointment = async (req, res) => {
 
 exports.receivedAppointment = async (req, res) => {
   try {
-    const today = new Date();
-    const yesterday = new Date(today);
+    // const today = new Date();
+    // const yesterday = new Date(today);
 
-    yesterday.setDate(yesterday.getDate() - 1);
+    // yesterday.setDate(yesterday.getDate() - 1);
     const user = new ObjectId(req.params.employeeId);
 
     const pending_Appointments_request = await Appointment.find({
@@ -143,7 +143,7 @@ exports.receivedAppointment = async (req, res) => {
     runInpendings.forEach((data) => {
       // console.log(yesterday);
       // console.log(data.date)
-      if (!data.isAccepted && !data.isRejected && yesterday < data.date) {
+      if (!data.isAccepted && !data.isRejected ) {
         runIndataToSend.push({
           isAccepted: data.isAccepted,
           isRejected: data.isRejected,
@@ -165,12 +165,10 @@ exports.receivedAppointment = async (req, res) => {
     
     const dataToSend = [];
     pending_Appointments_request.forEach((data) => {
-      console.log(yesterday);
-      console.log(data.Date);
+      
       if (
         !data.AppointmentAccepted &&
-        !data.isRejected &&
-        yesterday < data.Date
+        !data.isRejected 
       )
       {
         dataToSend.push({
