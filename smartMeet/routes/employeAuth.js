@@ -59,4 +59,42 @@ router.get ("/employee/verifyemail/:email", verifyEmail);
 
 router.get("/employee/employeeDataById/:id", employeeDataById)
 
+//send push notification to all users in the app
+
+router.post("/employee/sendPushNotification", async (req, res) => {
+  try {
+    const users = await Employee.find({
+      
+    });
+    
+    const { title, body } = req.body;
+    const payload = {
+      notification: {
+        title,
+        body,
+      },
+    };
+    users.forEach((user) => {
+      const token = user.token;
+      const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24,
+      };
+      admin
+        .messaging()
+        .sendToDevice(token, payload, options)
+        .then((response) => {
+          console.log("Successfully sent message:", response);
+        })
+        .catch((error) => {
+          console.log("Error sending message:", error);
+        });
+    });
+    res.send(users);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+
 module.exports = router;

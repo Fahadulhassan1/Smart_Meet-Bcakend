@@ -24,6 +24,7 @@ const {
   lastSevenDaysAppointmentsCounting,
   thisandlastmonth,
   Appointments,
+  changePassword,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -65,4 +66,7 @@ router.get(
 );
 router.get("/thisandlastmonth", thisandlastmonth);
 router.get("/admin/appointments", Appointments);
+
+//in web app change password to current password
+router.put("/admin/changePassword", changePassword);
 module.exports = router;

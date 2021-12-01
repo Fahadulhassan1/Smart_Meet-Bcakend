@@ -10,14 +10,14 @@ const adminSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      minlength: 7,
     },
     resetPasswordToken: {
       type: String,
     },
     resetPasswordExpires: {
       type: Date,
-    
-    }
+    },
   },
   { timestamps: true }
 );

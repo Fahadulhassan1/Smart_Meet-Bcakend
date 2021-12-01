@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 var ObjectId = require("mongoose").Types.ObjectId;
  var nodemailer = require("nodemailer");
 const _ = require("lodash");
+const validatePassword = require("validate-password");
 
 const { rawListeners } = require("../model/user");
 exports.allUser_Without_Acctivation = async (req, res) => {
@@ -606,4 +607,24 @@ exports.Appointments = async function (req, res) {
 }
 
 
+//in web app change password change password
+exports.changePassword = async function (req, res) {
+  try {
+    var user = await Admin.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(400).send({ error: "User not found" });
+    }
+    if (!(user.password == req.body.currentPassword)) {
+      return res.status(400).send({ error: "Current password is wrong" });
+    }
+    if (req.body.newPassword.length < 7) {
+      return res.status(400).send({ error: "Password must be at least 7 characters long" });
+    }
+    user.password = req.body.newPassword;
+    await user.save();
+    res.send({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}
 
