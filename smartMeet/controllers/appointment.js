@@ -195,13 +195,14 @@ exports.receivedAppointment = async (req, res) => {
   }
 };
 exports.acceptAppointments = async (req, res) => {
-  const _id = req.params.id;
-  // console.log(_id);
+  const _id = new ObjectId(req.params.id);
+  console.log(_id);
   var accept = true;
-  
-  if (Appointment.findById(_id)) {
-    await Appointment.findOne({ _id }, (err, user) => {
-      if (err || !user) {
+  const users = await Appointment.findOne({ _id: _id });
+  if (users != null)   {
+    var user = await Appointment.findOne({ _id: _id })
+    console.log(user);
+      if ( !user) {
         return res.send({ error: "no appointment found" });
       }
       const obj = {
@@ -217,17 +218,19 @@ exports.acceptAppointments = async (req, res) => {
             .send({ message: "appointment request accepted" });
         }
       });
-    });
+   
   } else {
-    await RunInAppointment.findOne({ _id }, (err, user) => {
-      if (err || !user) {
+    var user1 = await RunInAppointment.findOne({ _id: _id })
+   
+
+      if ( !user1) {
         return res.send({ error: "no appointment found" });
       }
-      const obj = {
+      const obj1 = {
         isAccepted: accept,
       };
-      user = _.extend(user, obj);
-      user.save((err, result) => {
+      user1 = _.extend(user1, obj1);
+      user1.save((err, result) => {
         if (err) {
           return res.send({ error: "cannot accept currently" });
         } else {
@@ -236,9 +239,9 @@ exports.acceptAppointments = async (req, res) => {
             .send({ message: "appointment request accepted" });
         }
       });
-    });
+    };
   }
-};
+
 exports.acceptedAppointments = async function (req, res) {
   const visitor = new ObjectId(req.params.VisitorId);
   console.log(visitor);
@@ -314,13 +317,17 @@ exports.searchEmployees = async (req, res) => {
 };
 
 exports.reject_Appointment = async (req, res) => {
-  const _id = req.params.id;
+  const _id = new ObjectId(req.params.id);
   console.log(_id);
   var accept = true;
-  if (Appointment.findById(_id)) {
-    await Appointment.findOne({ _id }, (err, user) => {
+  const users = await Appointment.findOne({ _id: _id });
+  console.log(  users);
+  if (users != null)  {
+    console.log("1");
+    await Appointment.findOne({ _id: _id }, (err, user) => {
+      console.log(user);
       if (err || !user) {
-        return res.send({ error: "no appointment found" });
+        return res.send({ error: "no this appointment found" });
       }
       const obj = {
         isRejected: accept,
@@ -338,9 +345,10 @@ exports.reject_Appointment = async (req, res) => {
       });
     });
   } else {
-    await RunInAppointment.findOne({ _id }, (err, user) => {
+    await RunInAppointment.findOne({ _id: _id }, (err, user) => {
+      console.log("user runin" + user)
       if (err || !user) {
-        return res.send({ error: "no appointment found" });
+        return res.send({ error: "no run inappointment found" });
       }
       const obj = {
         isRejected: accept,
