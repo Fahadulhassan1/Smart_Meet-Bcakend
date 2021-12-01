@@ -122,6 +122,10 @@ exports.cancelAppointment = async (req, res) => {
 
 exports.receivedAppointment = async (req, res) => {
   try {
+    const today = new Date();
+    const yesterday = new Date(today);
+
+    yesterday.setDate(yesterday.getDate() - 1);
     const user = new ObjectId(req.params.employeeId);
 
     const pending_Appointments_request = await Appointment.find({
@@ -134,12 +138,12 @@ exports.receivedAppointment = async (req, res) => {
         .status(399)
         .send({ message: "No pending Appointment Requests" });
     }
-    const runInAppointment_requests = await RunInAppointment.find({
-      employeeId: user,
-    });
+    
     const runIndataToSend = [];
-    runInAppointment_requests.forEach((data) => {
-      if (!data.isAccepted && !data.isRejected) {
+    runInpendings.forEach((data) => {
+      console.log(yesterday);
+      console.log(data.date)
+      if (!data.isAccepted && !data.isRejected && yesterday < data.date) {
         runIndataToSend.push({
           isAccepted: data.isAccepted,
           isRejected: data.isRejected,
@@ -158,10 +162,14 @@ exports.receivedAppointment = async (req, res) => {
       }
     });
 
-    const result = pending_Appointments_request;
+    
     const dataToSend = [];
-    result.forEach((data) => {
-      if (!data.AppointmentAccepted && !data.isRejected) {
+    pending_Appointments_request.forEach((data) => {
+      if (
+        !data.AppointmentAccepted &&
+        !data.isRejected &&
+        yesterday < data.date
+      ) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
