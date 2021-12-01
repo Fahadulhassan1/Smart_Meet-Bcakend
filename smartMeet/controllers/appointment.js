@@ -141,8 +141,8 @@ exports.receivedAppointment = async (req, res) => {
     
     const runIndataToSend = [];
     runInpendings.forEach((data) => {
-      console.log(yesterday);
-      console.log(data.date)
+      // console.log(yesterday);
+      // console.log(data.date)
       if (!data.isAccepted && !data.isRejected && yesterday < data.date) {
         runIndataToSend.push({
           isAccepted: data.isAccepted,
@@ -165,11 +165,14 @@ exports.receivedAppointment = async (req, res) => {
     
     const dataToSend = [];
     pending_Appointments_request.forEach((data) => {
+      console.log(yesterday);
+      console.log(data.Date);
       if (
         !data.AppointmentAccepted &&
         !data.isRejected &&
-        yesterday < data.date
-      ) {
+        yesterday < data.Date
+      )
+      {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
