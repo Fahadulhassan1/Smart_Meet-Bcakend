@@ -412,16 +412,22 @@ exports.hostAcceptedAppointments = async (req, res) => {
       employeeId: user,
     });
 
-    if (pending_Appointments_request.length == 0 && pending_Appointments_request1.length == 0) {
+    if (
+      pending_Appointments_request.length == 0 &&
+      pending_Appointments_request1.length == 0
+    ) {
       return res.status(399).send({ message: "No accepted Appointments" });
     }
-    var date = new Date();
+    const today = new Date();
+    const yesterday = new Date(today);
+
+    yesterday.setDate(yesterday.getDate() - 1);
 
     const result = pending_Appointments_request;
     const dataToSend = [];
 
     result.forEach((data) => {
-      if (data.AppointmentAccepted && data.Date > date) {
+      if (data.AppointmentAccepted && data.Date > yesterday) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
@@ -439,7 +445,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
     });
     var dataToSend1 = [];
     pending_Appointments_request1.forEach((data) => {
-      if (data.isAccepted && data.date > date) {
+      if (data.isAccepted && data.date > yesterday) {
         dataToSend1.push({
           isAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
@@ -455,8 +461,8 @@ exports.hostAcceptedAppointments = async (req, res) => {
           isUrgent: data.isUrgent,
         });
       }
-    })
-    var concat2arrrays = [dataToSend1 , dataToSend]
+    });
+    var concat2arrrays = [dataToSend1, dataToSend];
     res.send(concat2arrrays);
   } catch (e) {
     return res.status(399).send({ error: "error exists" });
