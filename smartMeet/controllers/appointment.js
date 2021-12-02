@@ -439,7 +439,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
     });
     var dataToSend1 = [];
     pending_Appointments_request1.forEach((data) => {
-      if (data.AppointmentAccepted && data.date > date) {
+      if (data.isAccepted && data.date > date) {
         dataToSend1.push({
           isAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
