@@ -138,12 +138,12 @@ exports.receivedAppointment = async (req, res) => {
         .status(399)
         .send({ message: "No pending Appointment Requests" });
     }
-    
+
     const runIndataToSend = [];
     runInpendings.forEach((data) => {
       // console.log(yesterday);
       // console.log(data.date)
-      if (!data.isAccepted && !data.isRejected ) {
+      if (!data.isAccepted && !data.isRejected) {
         runIndataToSend.push({
           isAccepted: data.isAccepted,
           isRejected: data.isRejected,
@@ -162,15 +162,9 @@ exports.receivedAppointment = async (req, res) => {
       }
     });
 
-    
     const dataToSend = [];
     pending_Appointments_request.forEach((data) => {
-      
-      if (
-        !data.AppointmentAccepted &&
-        !data.isRejected 
-      )
-      {
+      if (!data.AppointmentAccepted && !data.isRejected) {
         dataToSend.push({
           AppointmentAccepted: data.AppointmentAccepted,
           isRejected: data.isRejected,
@@ -199,48 +193,46 @@ exports.acceptAppointments = async (req, res) => {
   console.log(_id);
   var accept = true;
   const users = await Appointment.findOne({ _id: _id });
-  if (users != null)   {
-    var user = await Appointment.findOne({ _id: _id })
+  if (users != null) {
+    var user = await Appointment.findOne({ _id: _id });
     console.log(user);
-      if ( !user) {
-        return res.send({ error: "no appointment found" });
-      }
-      const obj = {
-        AppointmentAccepted: accept,
-      };
-      user = _.extend(user, obj);
-      user.save((err, result) => {
-        if (err) {
-          return res.send({ error: "cannot accept currently" });
-        } else {
-          return res
-            .status(200)
-            .send({ message: "appointment request accepted" });
-        }
-      });
-   
-  } else {
-    var user1 = await RunInAppointment.findOne({ _id: _id })
-   
-
-      if ( !user1) {
-        return res.send({ error: "no appointment found" });
-      }
-      const obj1 = {
-        isAccepted: accept,
-      };
-      user1 = _.extend(user1, obj1);
-      user1.save((err, result) => {
-        if (err) {
-          return res.send({ error: "cannot accept currently" });
-        } else {
-          return res
-            .status(200)
-            .send({ message: "appointment request accepted" });
-        }
-      });
+    if (!user) {
+      return res.send({ error: "no appointment found" });
+    }
+    const obj = {
+      AppointmentAccepted: accept,
     };
+    user = _.extend(user, obj);
+    user.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot accept currently" });
+      } else {
+        return res
+          .status(200)
+          .send({ message: "appointment request accepted" });
+      }
+    });
+  } else {
+    var user1 = await RunInAppointment.findOne({ _id: _id });
+
+    if (!user1) {
+      return res.send({ error: "no appointment found" });
+    }
+    const obj1 = {
+      isAccepted: accept,
+    };
+    user1 = _.extend(user1, obj1);
+    user1.save((err, result) => {
+      if (err) {
+        return res.send({ error: "cannot accept currently" });
+      } else {
+        return res
+          .status(200)
+          .send({ message: "appointment request accepted" });
+      }
+    });
   }
+};
 
 exports.acceptedAppointments = async function (req, res) {
   const visitor = new ObjectId(req.params.VisitorId);
@@ -321,8 +313,8 @@ exports.reject_Appointment = async (req, res) => {
   console.log(_id);
   var accept = true;
   const users = await Appointment.findOne({ _id: _id });
-  console.log(  users);
-  if (users != null)  {
+  console.log(users);
+  if (users != null) {
     console.log("1");
     await Appointment.findOne({ _id: _id }, (err, user) => {
       console.log(user);
@@ -346,7 +338,7 @@ exports.reject_Appointment = async (req, res) => {
     });
   } else {
     await RunInAppointment.findOne({ _id: _id }, (err, user) => {
-      console.log("user runin" + user)
+      console.log("user runin" + user);
       if (err || !user) {
         return res.send({ error: "no run inappointment found" });
       }
@@ -372,7 +364,6 @@ exports.rejected_Appointments = async (req, res) => {
   const visitor = new ObjectId(req.params.VisitorId);
   console.log(visitor);
   const accepted_requests = await Appointment.find({ VisitorId: visitor });
-  
 
   if (accepted_requests.length == 0) {
     return res.send({ message: "No Rejected Appointment Requests" });
@@ -459,6 +450,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
           timeslot: data.timeslot,
           message: data.message,
           isUrgent: data.isUrgent,
+          avatar : data.avatar
         });
       }
     });
