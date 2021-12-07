@@ -460,3 +460,21 @@ exports.hostAcceptedAppointments = async (req, res) => {
     return res.status(399).send({ error: "error exists" });
   }
 };
+//post method for token store
+// exports.storeToken = async (req, res) => {
+   
+//   var token = req.params.token
+//   var id = req.params.id
+//   console.log(token)
+//   var user = await User.findOne({
+//     _id: id
+//   })
+//   if (user) {
+//     user.token = token
+//     user.save()
+//     return res.status(200).send({ message: "token stored" })
+//   } else {
+//     return res.status(400).send({ message: "user not found" })
+//   }
+// }
+    

@@ -64,7 +64,10 @@ const employeeSchema = new mongoose.Schema({
   isRejected: {
     type: Boolean,
     default : false
-  }
+  },
+  token: {
+    type: String,
+  },
   
 }, {timestamps: true} );
 

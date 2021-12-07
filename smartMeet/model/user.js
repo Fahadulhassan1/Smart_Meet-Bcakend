@@ -59,7 +59,10 @@ const userSchema = new mongoose.Schema({
   avatar: {
   type : String,
   
-  }
+  },
+  token: {
+    type: String,
+  },
 }, {timestamps: true} );
 const User =  mongoose.model('User' , userSchema)
 module.exports =User   ;

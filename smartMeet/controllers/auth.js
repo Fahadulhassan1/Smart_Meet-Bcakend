@@ -38,17 +38,25 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, token } = req.body;
+
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       if (user.email == email && user.password == password) {
-        return res.status(200).json({ success: "user signedin" });
-      }
-      return res.status(400).json({ error: "wrong email or password" });
-    }
-    return res.status(400).json({ error: "user does not exist" });
+        user.token = token;
+        user.save((err, sucess) => {
+          if (err) {
+            return res.status(400).json({ error: err.message });
+          }
+         return res.json({ message: "signin successful" });
+       
+          
+        }
+        );
+    };
+  }
   });
-};
+}
 
 exports.forgetPassword = function (req, res) {
   const { email, newpass } = req.body;
