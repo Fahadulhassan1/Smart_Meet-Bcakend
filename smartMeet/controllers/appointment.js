@@ -3,6 +3,17 @@ const Employee = require("../model/employee");
 const Appointment = require("../model/appointment");
 const RunInAppointment = require("../model/runInAppointment");
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://myfirstfirebasic.firebaseio.com",
+});
+
+
+
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
@@ -48,11 +59,36 @@ exports.newAppointmentRequest = async (req, res, next) => {
 
       // avatar,
     });
-    AppointmentRequest.save((err, sucess) => {
+    AppointmentRequest.save((err, sucess)  => {
       if (err) {
         return res.status(400).json({ error: "error in sending request" });
       }
-      return res.json({ message: "appointment request sent successfully" });
+      // var employee_token = Employee.findById(employeeId);
+      // const token = employee_token.token
+
+          const notification = {
+            title: "You recieved a appointment request",
+            body: `Notification recieved`,
+      };
+      
+                 const payload = {
+                   notification: notification,
+                 };
+       admin
+         .messaging()
+         .sendToDevice(
+           [
+             "ckxKGfpPQ7m4EjbB0vxizs:APA91bHmQCnawbl-PBMYu3T44VYiAEMs4Vf6P17IQeVA9ou_NHECY3nCxpw-KTn_KZOMRt6M3mRp7stt_WdAQAJ_xMziLBLmaNmqIJDjBPzyfP3xMdX6pjZdHnBSv8UVE4mMnHo5J5Jn",
+           ],
+           payload
+         )
+         .then(() => {
+           return res.json({
+             message: "appointment request sent successfully",
+           });
+         });
+      
+      
     });
   }
 };

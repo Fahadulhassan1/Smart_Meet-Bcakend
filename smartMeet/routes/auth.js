@@ -18,7 +18,7 @@ const { profilepicture } = require("../controllers/auth");
 const {
   verifyEmail,
   usersDataById,
-  
+  logout
 } = require("../controllers/auth");
 //multer
 const upload = multer({
@@ -81,6 +81,7 @@ router.get("/visitor/:id/avatar", profilepicture);
 router.get("/visitor/:email/viewProfile", viewProfile);
 router.get ("/visitor/verifyemail/:email", verifyEmail);
 router.get("/visitor/usersProfile/:id", usersDataById)
+router.patch("/visitor/logout/:id" , logout)
 
 
 module.exports = router;

@@ -6,11 +6,17 @@ const User = require("../model/user");
 const _ = require("lodash");
 
 exports.signup = async (req, res) => {
-  
-    var { firstName, lastName, username, PhoneNumber, email, dateOfBirth, password, avatar } =
-      req.body;
-   
-  
+  var {
+    firstName,
+    lastName,
+    username,
+    PhoneNumber,
+    email,
+    dateOfBirth,
+    password,
+    avatar,
+  } = req.body;
+
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res
@@ -30,7 +36,7 @@ exports.signup = async (req, res) => {
     console.log(newUser);
     newUser.save((err, sucess) => {
       if (err) {
-        return res.status(400).json({ error: err.message});
+        return res.status(400).json({ error: err.message });
       }
       res.json({ message: "signup successful" });
     });
@@ -39,6 +45,7 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
   const { email, password, token } = req.body;
+  console.log(email);
 
   User.findOne({ email }).exec((err, user) => {
     if (user) {
@@ -48,15 +55,15 @@ exports.signin = async (req, res) => {
           if (err) {
             return res.status(400).json({ error: err.message });
           }
-         return res.json({ message: "signin successful" });
-       
-          
-        }
-        );
-    };
-  }
+          return res.json({ message: "signin successful" });
+        });
+      }
+    }else {
+        return res.status(400).json({ error: "password is incorrect" });
+      }
+    
   });
-}
+};
 
 exports.forgetPassword = function (req, res) {
   const { email, newpass } = req.body;
@@ -103,7 +110,7 @@ exports.updateProfile = async (req, res) => {
   try {
     var { id, firstName, lastName, avatar } = req.body;
     console.log(id);
-    console.log(lastName)
+    console.log(lastName);
     if (avatar === undefined || avatar === null || avatar == "") {
       var avat = await User.findById(id);
       avatar = avat.avatar;
@@ -161,37 +168,58 @@ exports.viewProfile = async (req, res, next) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  const email = req.params.email ;
+  const email = req.params.email;
   try {
- await  User.findOne({ email }, (err, user) => { 
-    if(user ) {
-       return res.status(200).send({ message: "Email exists " });
-    
-    }
-    return res.status(404).send({ message: "No email found" });
-  
-  })
-}catch (e) {
-  return res.status(500).send({ message: e.message });
-}
-}
+    await User.findOne({ email }, (err, user) => {
+      if (user) {
+        return res.status(200).send({ message: "Email exists " });
+      }
+      return res.status(404).send({ message: "No email found" });
+    });
+  } catch (e) {
+    return res.status(500).send({ message: e.message });
+  }
+};
 
 exports.usersDataById = async (req, res) => {
   var id = req.params.id;
-  var ObjectId = require('mongoose').Types.ObjectId;
-  if (id == undefined || id == null || id.length == 0 || ! ObjectId.isValid(id)) {
+  var ObjectId = require("mongoose").Types.ObjectId;
+  if (
+    id == undefined ||
+    id == null ||
+    id.length == 0 ||
+    !ObjectId.isValid(id)
+  ) {
     return res.send("incoorect id");
   }
 
-  await User.findOne({ _id : id }, (err, user) => {
+  await User.findOne({ _id: id }, (err, user) => {
     if (!user) {
       return res.send({ error: "User not found" });
     }
     return res.send({ user });
   });
-}
+};
 
+exports.logout = function(req, res) {
+  var id = req.params.id;
+  if (id == undefined || id == null || id.length == 0) {
+    return res.send("incoorect id");
+  }
+  User.findOne({ _id: id }, (err, user) => {
+    if (!user) {
+      return res.send({ error: "User not found" });
+    }
+    user.token = "";
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+      return res.json({ message: "logout successful" });
+    });
+  });
 
+};
 
 // exports.signup = (req, res) => {
 //   console.log(req.body);
@@ -285,7 +313,4 @@ exports.usersDataById = async (req, res) => {
 //   res.send(req.body.firstName)
 //   console.log("done1");
 
- 
 // };
-
-   

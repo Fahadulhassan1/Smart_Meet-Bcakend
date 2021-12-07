@@ -17,7 +17,7 @@ const { viewProfile } = require("../controllers/EmployeeAuth");
 const {
   verifyEmail,
   employeeDataById,
-  
+  logout,
 } = require("../controllers/EmployeeAuth");
 //multer
 const upload = multer({
@@ -60,7 +60,7 @@ router.get ("/employee/verifyemail/:email", verifyEmail);
 router.get("/employee/employeeDataById/:id", employeeDataById)
 
 //send push notification to all users in the app
-
+router.patch("/employee/logout/:id", logout);
 router.post("/employee/sendPushNotification", async (req, res) => {
   try {
     const users = await Employee.find({

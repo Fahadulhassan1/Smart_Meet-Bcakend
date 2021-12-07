@@ -43,23 +43,22 @@ exports.signup = async (req, res) => {
   });
 };
 exports.signin = async (req, res) => {
-   const { email, password, token } = req.body;
+  const { email, password, token } = req.body;
 
   Employee.findOne({ email }).exec((err, user) => {
-    if (user) {
+    if (user) { 
       if (user.email == email && user.password == password) {
         user.token = token;
         user.save((err, sucess) => {
           if (err) {
             return res.status(400).json({ error: err.message });
           }
-         return res.json({ message: "signin successful" });
-       
-          
-        }
-        );
-    };
-  }
+          return res.json({ message: "signin successful" });
+        });
+      }
+    } else {
+      return res.status(400).json({ error: "signin unauthorized" });
+    }
   });
 };
 exports.forgetPassword = function (req, res) {
@@ -104,29 +103,30 @@ exports.profilepicture = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   console.log("done1");
-  var {id,firstName , lastName , avatar} = req.body
- 
- if (avatar === undefined || avatar === null || avatar == "") {
-   var avat = await Employee.findById(id);
-   avatar = avat.avatar;
- }
- if (firstName === undefined || firstName === null || firstName == "") {
-   var firstNa = await Employee.findById(id);
-   firstName = firstNa.firstName;
- }
- if (lastName === undefined || lastName === null || lastName == "") {
-   var lastNa = await Employee.findById(id);
-   lastName = lastNa.lastName;
- }
-  
+  var { id, firstName, lastName, avatar } = req.body;
+
+  if (avatar === undefined || avatar === null || avatar == "") {
+    var avat = await Employee.findById(id);
+    avatar = avat.avatar;
+  }
+  if (firstName === undefined || firstName === null || firstName == "") {
+    var firstNa = await Employee.findById(id);
+    firstName = firstNa.firstName;
+  }
+  if (lastName === undefined || lastName === null || lastName == "") {
+    var lastNa = await Employee.findById(id);
+    lastName = lastNa.lastName;
+  }
+
   //console.log(data);
 
   var update = Employee.findByIdAndUpdate(
-    { _id: id }, {
+    { _id: id },
+    {
       firstName: firstName,
       lastName: lastName,
-      avatar : avatar
-    } ,
+      avatar: avatar,
+    },
     function (err, data) {
       if (err) {
         console.log(err.mesage);
@@ -164,7 +164,7 @@ exports.verifyEmail = async (req, res) => {
 };
 exports.employeeDataById = async (req, res) => {
   var id = req.params.id;
-  
+
   // console.log( ObjectId.isValid(id)); //true
   try {
     if (
@@ -186,4 +186,21 @@ exports.employeeDataById = async (req, res) => {
     return res.status(400).send({ error: err });
   }
 };
- 
+exports.logout = function (req, res) {
+  var id = req.params.id;
+  if (id == undefined || id == null || id.length == 0) {
+    return res.send("incoorect id");
+  }
+  Employee.findOne({ _id: id }, (err, user) => {
+    if (!user) {
+      return res.send({ error: "Employee not found" });
+    }
+    user.token = "";
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+      return res.json({ message: "logout successful" });
+    });
+  });
+};
