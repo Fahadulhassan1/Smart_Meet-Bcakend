@@ -43,23 +43,37 @@ exports.signup = async (req, res) => {
   });
 };
 exports.signin = async (req, res) => {
-  const { email, password, token } = req.body;
+  try {
+    const { email, password, token } = req.body;
+    console.log(email);
 
-  Employee.findOne({ email }).exec((err, user) => {
-    if (user) { 
-      if (user.email == email && user.password == password) {
-        user.token = token;
-        user.save((err, sucess) => {
-          if (err) {
-            return res.status(400).json({ error: err.message });
-          }
-          return res.json({ message: "signin successful" });
-        });
+    Employee.findOne({ email }).exec((err, user) => {
+      if (user) {
+        if (user.email == email && user.password == password) {
+          const obj = {
+            token: token,
+          };
+          user = _.extend(user, obj);
+          user.save((err, sucess) => {
+            if (err) {
+              return res.status(400).json({ error: err.message });
+            } else {
+              return res.json({ message: "signin successful" });
+            }
+          });
+        } else {
+          return res.status(400).json({ error: "password is incorrect" });
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ error: "email or password is incorrect" });
       }
-    } else {
-      return res.status(400).json({ error: "signin unauthorized" });
-    }
-  });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
 };
 exports.forgetPassword = function (req, res) {
   const { email, newpass } = req.body;

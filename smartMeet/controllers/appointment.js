@@ -12,8 +12,6 @@ admin.initializeApp({
   databaseURL: "https://myfirstfirebasic.firebaseio.com",
 });
 
-
-
 var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
@@ -59,36 +57,39 @@ exports.newAppointmentRequest = async (req, res, next) => {
 
       // avatar,
     });
-    AppointmentRequest.save((err, sucess)  => {
+
+    AppointmentRequest.save(async (err, sucess) => {
       if (err) {
         return res.status(400).json({ error: "error in sending request" });
       }
       // var employee_token = Employee.findById(employeeId);
       // const token = employee_token.token
+      const employee = await Employee.findById(employeeId);
+      console.log(employee);
 
-          const notification = {
-            title: "You recieved a appointment request",
-            body: `Notification recieved`,
-      };
-      
-                 const payload = {
-                   notification: notification,
-                 };
-       admin
-         .messaging()
-         .sendToDevice(
-           [
-             "ckxKGfpPQ7m4EjbB0vxizs:APA91bHmQCnawbl-PBMYu3T44VYiAEMs4Vf6P17IQeVA9ou_NHECY3nCxpw-KTn_KZOMRt6M3mRp7stt_WdAQAJ_xMziLBLmaNmqIJDjBPzyfP3xMdX6pjZdHnBSv8UVE4mMnHo5J5Jn",
-           ],
-           payload
-         )
-         .then(() => {
-           return res.json({
-             message: "appointment request sent successfully",
-           });
-         });
-      
-      
+      var token = employee.token;
+      if (token == undefined || token == null) {
+        token = "";
+        res.send({ message: "appointment sent sucessfully" });
+      } else {
+        console.log(token);
+        const notification = {
+          title: "Appointment Request",
+          body: `Appointment request recieved from ${VisitorId}`,
+        };
+
+        const payload = {
+          notification: notification,
+        };
+        admin
+          .messaging()
+          .sendToDevice([token], payload)
+          .then(() => {
+            return res.json({
+              message: "appointment request sent successfully",
+            });
+          });
+      }
     });
   }
 };
@@ -239,13 +240,34 @@ exports.acceptAppointments = async (req, res) => {
       AppointmentAccepted: accept,
     };
     user = _.extend(user, obj);
-    user.save((err, result) => {
+    user.save(async (err, result) => {
       if (err) {
         return res.send({ error: "cannot accept currently" });
       } else {
-        return res
-          .status(200)
-          .send({ message: "appointment request accepted" });
+        const visitor = users.VisitorId;
+        const user = await User.findById(visitor);
+        const token = user.token;
+        if (token == undefined || token == null) {
+          return res.send({ error: "appointment request accepte" });
+        } else {
+          console.log(token);
+          const notification = {
+            title: "Appointment Request",
+            body: `Appointment request accepted `,
+          };
+
+          const payload = {
+            notification: notification,
+          };
+          admin
+            .messaging()
+            .sendToDevice([token], payload)
+            .then(() => {
+              return res.json({
+                message: "appointment request accepted successfully",
+              });
+            });
+        }
       }
     });
   } else {
@@ -362,13 +384,35 @@ exports.reject_Appointment = async (req, res) => {
         AppointmentAccepted: false,
       };
       user = _.extend(user, obj);
-      user.save((err, result) => {
+      user.save(async (err, result) => {
         if (err) {
           return res.send({ error: "cannot reject currently" });
         } else {
-          return res
-            .status(200)
-            .send({ message: "appointment rejected sucessfully" });
+          const visitor = users.VisitorId;
+          const user = await User.findById(visitor);
+          const token = user.token;
+          if (token == undefined || token == null) {
+            return res.send({ error: "appointment request rejected" });
+          } else {
+          
+          console.log(token);
+          const notification = {
+            title: "Appointment Request",
+            body: `Appointment request rejected `,
+          };
+
+          const payload = {
+            notification: notification,
+          };
+          admin
+            .messaging()
+            .sendToDevice([token], payload)
+            .then(() => {
+              return res.json({
+                message: "appointment request rejected ",
+              });
+            });
+          }
         }
       });
     });
@@ -486,7 +530,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
           timeslot: data.timeslot,
           message: data.message,
           isUrgent: data.isUrgent,
-          avatar : data.avatar
+          avatar: data.avatar,
         });
       }
     });
@@ -498,7 +542,7 @@ exports.hostAcceptedAppointments = async (req, res) => {
 };
 //post method for token store
 // exports.storeToken = async (req, res) => {
-   
+
 //   var token = req.params.token
 //   var id = req.params.id
 //   console.log(token)
@@ -513,4 +557,3 @@ exports.hostAcceptedAppointments = async (req, res) => {
 //     return res.status(400).send({ message: "user not found" })
 //   }
 // }
-    
