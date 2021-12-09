@@ -394,24 +394,23 @@ exports.reject_Appointment = async (req, res) => {
           if (token == undefined || token == null) {
             return res.send({ error: "appointment request rejected" });
           } else {
-          
-          console.log(token);
-          const notification = {
-            title: "Appointment Request",
-            body: `Appointment request rejected `,
-          };
+            console.log(token);
+            const notification = {
+              title: "Appointment Request",
+              body: `Appointment request rejected `,
+            };
 
-          const payload = {
-            notification: notification,
-          };
-          admin
-            .messaging()
-            .sendToDevice([token], payload)
-            .then(() => {
-              return res.json({
-                message: "appointment request rejected ",
+            const payload = {
+              notification: notification,
+            };
+            admin
+              .messaging()
+              .sendToDevice([token], payload)
+              .then(() => {
+                return res.json({
+                  message: "appointment request rejected ",
+                });
               });
-            });
           }
         }
       });

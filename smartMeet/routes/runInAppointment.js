@@ -16,7 +16,7 @@ try {
     databaseURL: "https://myfirstfirebasic.firebaseio.com",
   });
 } catch (e) {
-  console.log('already initialized');
+  console.log("already initialized");
 }
 
 router.post("/visitor/runInappointment", async (req, res, next) => {
@@ -53,7 +53,10 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
       }
       //send push notification to employee
       const employee = await Employee.findById(employeeId);
-      const token = employee.token;
+      var token = employee.token;
+      // token = token.toString();
+      console.log(token);
+
       if (token == null || token == undefined || token == "") {
         return res.status(200).json({ error: "appointment sent sucessfully." });
       } else {
@@ -62,10 +65,15 @@ router.post("/visitor/runInappointment", async (req, res, next) => {
             title: "New Run In Appointment Request",
             body: "You have a new Run In Appointment Request",
           },
-        }; 
+        };
         admin
           .messaging()
-          .sendToDevice(token, payload)
+          .sendToDevice(
+            [token],
+            // "fTANfIrGRwmqpPAxO4DtLQ:APA91bHPUzHnDsFxY2hy5F8aM6WtaClEjXFoaLAZ_MORY4C9_s4Qm6D8lpJk0qSRJRtly2KTSp3optF25qnbO5GYboJ52nFS7pA0IAO5S4ZJxvw2VZAc3xdT4E_m3CxoYcq5IPcPz4ls",
+
+            payload
+          )
           .then((response) => {
             console.log("Successfully sent message:", response);
           })
