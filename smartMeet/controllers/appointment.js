@@ -556,3 +556,15 @@ exports.hostAcceptedAppointments = async (req, res) => {
 //     return res.status(400).send({ message: "user not found" })
 //   }
 // }
+
+exports.matchAppointmentId = async (req, res) => {
+  var id = req.params.id;
+  var user = await Appointment.findById({
+    _id: id,
+  });
+  if (user) {
+    return res.status(200).send({ message: "user found" });
+  } else {
+    return res.status(400).send({ message: "user not found" });
+  }
+}

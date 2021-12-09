@@ -20,7 +20,7 @@ const {
   reject_Appointment,
   rejected_Appointments,
   hostAcceptedAppointments,
-  
+  matchAppointmentId,
 } = require("../controllers/appointment");
 const upload = multer({
     limits: {
@@ -54,5 +54,6 @@ router.get("/visitor/acceptedrequest/:VisitorId" , acceptedAppointments) ;
 router.get("/visitor/acceptedrequest/qrcode/:id",qrcode)
 router.get("/visitor/searchEmployees/:name" , searchEmployees) ;
 router.post("/employee/rejectAppointment/:id",reject_Appointment)
-router.get("/visitor/rejectedRequests/:VisitorId" , rejected_Appointments) ;
+router.get("/visitor/rejectedRequests/:VisitorId", rejected_Appointments);
+router.get("/appointment/matchAppointmentId/:id", matchAppointmentId);
 module.exports = router;
