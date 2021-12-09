@@ -2,7 +2,7 @@ const User = require("../model/user");
 const Employee = require("../model/employee");
 const Appointment = require("../model/appointment");
 const RunInAppointment = require("../model/runInAppointment");
-
+const fs = require("fs");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./serviceAccountKey.json");
@@ -328,18 +328,21 @@ exports.acceptedAppointments = async function (req, res) {
   }
 };
 
-exports.qrcode = (req, res) => {
-  const appointmentId = req.params.id;
-  console.log(appointmentId);
-  try {
-    qr.toDataURL(appointmentId.toString(), (err, src) => {
-      if (err) return res.send("Error occured");
+exports.qrcode = async (req, res) => {
+  
 
-      // Let us return the QR code image as our response and set it to be the source used in the webpage
-      return res.send(src);
-    });
+  try {
+    const appointmentId = req.params.id;
+    console.log(appointmentId);
+  const qrcode = await qr.toDataURL(appointmentId);
+
+    fs.writeFileSync('./qr.html', `<img src="${qrcode}">`);
+   
+    console.log('Wrote to ./qr.html');
+    return  res.status(200).send(qrcode);
+   
   } catch (err) {
-    return res.send(err.message);
+    return res.status(400).send(err.message);
   }
 };
 exports.searchEmployees = async (req, res) => {
