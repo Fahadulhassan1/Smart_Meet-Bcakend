@@ -10,6 +10,7 @@ var ObjectId = require("mongoose").Types.ObjectId;
  var nodemailer = require("nodemailer");
 const _ = require("lodash");
 const validatePassword = require("validate-password");
+var admin = require("firebase-admin");
 
 const { rawListeners } = require("../model/user");
 exports.allUser_Without_Acctivation = async (req, res) => {
@@ -628,3 +629,46 @@ exports.changePassword = async function (req, res) {
   }
 }
 
+//alert to all via push notification
+exports.alertToAll = async function (req, res) {
+  const employee = await Employee.find({token : {$ne : null}});
+  const visitor = await Visitor.find({token : {$ne : null}});
+ 
+  const employeesToken = [];
+  const visitorsToken = [];
+  employee.forEach((employee) => {
+    employeesToken.push(employee.token);
+  });
+  visitor.forEach((visitor) => {
+    visitorsToken.push(visitor.token);
+  });
+  const token = employeesToken.concat(visitorsToken);
+
+     
+
+      
+        const payload = {
+          notification: {
+            title: "Alert",
+            body: "Please leave the building immediately",
+          },
+        };
+        admin
+          .messaging()
+          .sendToDevice(
+            token,
+            // "fTANfIrGRwmqpPAxO4DtLQ:APA91bHPUzHnDsFxY2hy5F8aM6WtaClEjXFoaLAZ_MORY4C9_s4Qm6D8lpJk0qSRJRtly2KTSp3optF25qnbO5GYboJ52nFS7pA0IAO5S4ZJxvw2VZAc3xdT4E_m3CxoYcq5IPcPz4ls",
+
+            payload
+          )
+          .then((response) => {
+            console.log("Successfully sent message:", response);
+          })
+          .catch((error) => {
+            console.log("Error sending message:", error);
+          });
+        return res
+          .status(200)
+          .json({ success: "Alert sent to all the users" });
+      
+    };
