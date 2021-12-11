@@ -7,7 +7,7 @@ var ObjectId = require("mongodb").ObjectID;
 const qr = require("qrcode");
 const jwt = require("jsonwebtoken");
 var ObjectId = require("mongoose").Types.ObjectId;
- var nodemailer = require("nodemailer");
+var nodemailer = require("nodemailer");
 const _ = require("lodash");
 const validatePassword = require("validate-password");
 var admin = require("firebase-admin");
@@ -172,11 +172,11 @@ exports.verifysignIn = async (req, res) => {
   const email = req.body.email;
 
   const password = req.body.password;
-  console.log(req.body)
+  console.log(req.body);
 
   const verification = await Admin.find({ email: email, password: password });
   if (verification.length > 0) {
-    res.json({verification, success: true});
+    res.json({ verification, success: true });
   } else {
     res.json({
       success: false,
@@ -206,7 +206,7 @@ exports.next_TwentyfourHoursAppointmentscounting = async (req, res) => {
 exports.next_TwentyfourHoursAppointments = async (req, res) => {
   var currentDateobj = new Date();
 
-  console.log('hellow')
+  console.log("hellow");
   var today = new Date();
   console.log(today);
   var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
@@ -291,12 +291,13 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
 
 //forget password api call
 exports.forgetPassword = function (req, res, next) {
-  
   var email = req.body.email;
   console.log(email);
   Admin.findOne({ email }, (err, admin) => {
     if (err || !admin) {
-      return res.send({ message: "no account found please enter email correctly" });
+      return res.send({
+        message: "no account found please enter email correctly",
+      });
     }
     var token = jwt.sign({ id: admin._id }, "secret", {
       expiresIn: "24h",
@@ -331,19 +332,21 @@ exports.forgetPassword = function (req, res, next) {
         };
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
-            return res.send({ message: "error in while sending because of heroku" });
-            
+            return res.send({
+              message: "error in while sending because of heroku",
+            });
           } else {
-            return res.send({ message: "email has been sent to your given email" });
+            return res.send({
+              message: "email has been sent to your given email",
+            });
           }
         });
       }
     });
   });
+};
 
-}
-  
-//add new password 
+//add new password
 exports.addnewPassword = function (req, res) {
   var token = req.params.token;
   var password = req.body.password;
@@ -354,7 +357,9 @@ exports.addnewPassword = function (req, res) {
     if (err) {
       return res.send({ error: "cannot reset password" });
     } else if (!admin) {
-      return res.send({ error: "password reset token is invalid or has expired" });
+      return res.send({
+        error: "password reset token is invalid or has expired",
+      });
     } else {
       admin.password = password;
       admin.resetPasswordToken = undefined;
@@ -368,11 +373,9 @@ exports.addnewPassword = function (req, res) {
       });
     }
   });
-}
+};
 
-    
 //chat app on server side using websocket connection
-
 
 exports.chat = function (req, res) {
   var io = req.app.get("socketio");
@@ -387,11 +390,11 @@ exports.chat = function (req, res) {
 
 //get report of last month appointments for admin
 
-exports.lastMonth = async (req , res) =>{
+exports.lastMonth = async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
   var lastMonth = new Date(currentDateobj.getTime() - 1000 * 60 * 60 * 24 * 30);
-  const appointments =await Appointment.find({
+  const appointments = await Appointment.find({
     $and: [
       { Date: { $gt: lastMonth } },
       { Date: { $lt: today } },
@@ -401,14 +404,15 @@ exports.lastMonth = async (req , res) =>{
   var length = appointments.length;
   console.log(length);
   res.send(appointments);
-
-}
+};
 
 exports.secondLastMonth = async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
   var lastMonth = new Date(currentDateobj.getTime() - 1000 * 60 * 60 * 24 * 30);
-  var secondLastMonth = new Date(lastMonth.getTime() - 1000 * 60 * 60 * 24 * 30);
+  var secondLastMonth = new Date(
+    lastMonth.getTime() - 1000 * 60 * 60 * 24 * 30
+  );
   const appointments = await Appointment.find({
     $and: [
       { Date: { $gt: secondLastMonth } },
@@ -419,51 +423,51 @@ exports.secondLastMonth = async (req, res) => {
   var length = appointments.length;
   console.log(length);
   res.send(appointments);
-}
+};
 //last seven days , day by day appointments
 exports.lastSevenDaysAppointments = async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
-  
 
   const thisweek = [];
   const lastweek = [];
 
   for (let i = 0; i < 7; i++) {
-    currentDateobj.setDate(currentDateobj.getDate() - i-1);
+    currentDateobj.setDate(currentDateobj.getDate() - i - 1);
     today.setDate(today.getDate() - i);
-    
-  //  console.log("current " + currentDateobj);
+
+    //  console.log("current " + currentDateobj);
     //console.log("todsay " + today);
-       var appointments = await Appointment.find({
-         $and: [
-           { Date: { $gt: currentDateobj } },
-           { Date: { $lt: today } },
-           { AppointmentAccepted: true },
-         ],
-       });
+    var appointments = await Appointment.find({
+      $and: [
+        { Date: { $gt: currentDateobj } },
+        { Date: { $lt: today } },
+        { AppointmentAccepted: true },
+      ],
+    });
     if (appointments.length > 0) {
       var length = appointments.length;
-      thisweek.push({ length: length, today : today.toDateString().slice(0,3) });
+      thisweek.push({
+        length: length,
+        today: today.toDateString().slice(0, 3),
+      });
     } else {
-      thisweek.push({ length: 0, today : today.toDateString().slice(0,3) });
+      thisweek.push({ length: 0, today: today.toDateString().slice(0, 3) });
     }
     today = new Date();
     currentDateobj = new Date();
   }
 
-/////////////////////////////////
+  /////////////////////////////////
   var currentDateobj30 = new Date();
   var today30 = new Date();
-
-  
 
   for (let i = 7; i < 14; i++) {
     currentDateobj30.setDate(currentDateobj30.getDate() - i - 1);
     today30.setDate(today30.getDate() - i);
 
     console.log("current" + currentDateobj30);
-  //  console.log(today30);
+    //  console.log(today30);
     var appointments = await Appointment.find({
       $and: [
         { Date: { $gt: currentDateobj30 } },
@@ -473,9 +477,12 @@ exports.lastSevenDaysAppointments = async (req, res) => {
     });
     if (appointments.length > 0) {
       var length = appointments.length;
-      lastweek.push({ length : length, today30 : today30.toDateString().slice(0,3) });
+      lastweek.push({
+        length: length,
+        today30: today30.toDateString().slice(0, 3),
+      });
     } else {
-      lastweek.push({ length: 0, today30: today30.toDateString().slice(0,3) });
+      lastweek.push({ length: 0, today30: today30.toDateString().slice(0, 3) });
     }
     today30 = new Date();
     currentDateobj30 = new Date();
@@ -483,7 +490,7 @@ exports.lastSevenDaysAppointments = async (req, res) => {
 
   console.log(lastweek);
 
-  res.send({lastweek,thisweek});
+  res.send({ lastweek, thisweek });
   // for (var i = 0; i < 7; i++) {
   //   var lastSevenDays = new Date(
   //     currentDateobj.getTime() - 1000 * 60 * 60 * 24 * i
@@ -507,13 +514,11 @@ exports.lastSevenDaysAppointments = async (req, res) => {
   //   today = lastSevenDays
   // }
 
-
-  
   // console.log(last7days);
   // res.json(last7days);
-}
+};
 
-exports.lastSevenDaysAppointmentsCounting= async (req, res) => {
+exports.lastSevenDaysAppointmentsCounting = async (req, res) => {
   var currentDateobj = new Date();
   var today = new Date();
   const last7days = [];
@@ -527,7 +532,6 @@ exports.lastSevenDaysAppointmentsCounting= async (req, res) => {
         { Date: { $lt: today } },
         { AppointmentAccepted: true },
       ],
-      
     });
     if (appointments.length == 0) {
       last7days.push(0);
@@ -559,22 +563,18 @@ exports.yesterday = async (req, res) => {
 exports.thisandlastmonth = function (res, res) {
   var date = new Date();
   var nextDate = new Date();
-  const sevenDays = []
+  const sevenDays = [];
   for (var i = 0; i < 7; i++) {
     console.log(i);
 
     date.setDate(date.getDate() - i);
-    nextDate.setDate(nextDate.getDate() - i-1);
+    nextDate.setDate(nextDate.getDate() - i - 1);
     console.log("date is " + date);
     console.log("next date is " + nextDate);
     date = new Date();
     nextDate = new Date();
-
- 
-   
   }
-res.send("done")
- 
+  res.send("done");
 };
 
 exports.Appointments = async function (req, res) {
@@ -584,29 +584,30 @@ exports.Appointments = async function (req, res) {
 
   var appointmentsData = [];
   appointments.forEach((appointment) => {
-    
-
     appointmentsData.push({
       AppointementAccepted: appointment.AppointmentAccepted,
       isRejected: appointment.isRejected,
-      employeeName: appointment.employeeId.firstName + ' ' + appointment.employeeId.lastName,
+      employeeName:
+        appointment.employeeId.firstName +
+        " " +
+        appointment.employeeId.lastName,
       Employee_email: appointment.employeeId.email,
       employeeAvatar: appointment.employeeId.avatar,
       isWatchListed: appointment.VisitorId.isWatchListed,
-      VisitorName: appointment.VisitorId.firstName + ' ' + appointment.VisitorId.lastName,
+      VisitorName:
+        appointment.VisitorId.firstName + " " + appointment.VisitorId.lastName,
       visitorEmail: appointment.VisitorId.email,
       visitorAvatar: appointment.VisitorId.avatar,
       VisitorComapany: appointment.CompanyName,
       Date: appointment.Date,
       Timeslot: appointment.Timeslot,
-      Message : appointment.Message,
+      Message: appointment.Message,
     });
   });
-   //res.send(appointments);
+  //res.send(appointments);
 
   res.send(appointmentsData);
-}
-
+};
 
 //in web app change password change password
 exports.changePassword = async function (req, res) {
@@ -619,7 +620,9 @@ exports.changePassword = async function (req, res) {
       return res.status(400).send({ error: "Current password is wrong" });
     }
     if (req.body.newPassword.length < 7) {
-      return res.status(400).send({ error: "Password must be at least 7 characters long" });
+      return res
+        .status(400)
+        .send({ error: "Password must be at least 7 characters long" });
     }
     user.password = req.body.newPassword;
     await user.save();
@@ -627,13 +630,13 @@ exports.changePassword = async function (req, res) {
   } catch (error) {
     res.status(400).send(error);
   }
-}
+};
 
 //alert to all via push notification
 exports.alertToAll = async function (req, res) {
-  const employee = await Employee.find({token : {$ne : null}});
-  const visitor = await Visitor.find({token : {$ne : null}});
- 
+  const employee = await Employee.find({ token: { $ne: null } });
+  const visitor = await Visitor.find({ token: { $ne: null } });
+
   const employeesToken = [];
   const visitorsToken = [];
   employee.forEach((employee) => {
@@ -643,32 +646,25 @@ exports.alertToAll = async function (req, res) {
     visitorsToken.push(visitor.token);
   });
   const token = employeesToken.concat(visitorsToken);
+  const payload = {
+    notification: {
+      title: "Alert",
+      body: "Please leave the building immediately",
+    },
+  };
+  admin
+    .messaging()
+    .sendToDevice(
+      token,
+      // "fTANfIrGRwmqpPAxO4DtLQ:APA91bHPUzHnDsFxY2hy5F8aM6WtaClEjXFoaLAZ_MORY4C9_s4Qm6D8lpJk0qSRJRtly2KTSp3optF25qnbO5GYboJ52nFS7pA0IAO5S4ZJxvw2VZAc3xdT4E_m3CxoYcq5IPcPz4ls",
 
-     
-
-      
-        const payload = {
-          notification: {
-            title: "Alert",
-            body: "Please leave the building immediately",
-          },
-        };
-        admin
-          .messaging()
-          .sendToDevice(
-            token,
-            // "fTANfIrGRwmqpPAxO4DtLQ:APA91bHPUzHnDsFxY2hy5F8aM6WtaClEjXFoaLAZ_MORY4C9_s4Qm6D8lpJk0qSRJRtly2KTSp3optF25qnbO5GYboJ52nFS7pA0IAO5S4ZJxvw2VZAc3xdT4E_m3CxoYcq5IPcPz4ls",
-
-            payload
-          )
-          .then((response) => {
-            console.log("Successfully sent message:", response);
-          })
-          .catch((error) => {
-            console.log("Error sending message:", error);
-          });
-        return res
-          .status(200)
-          .json({ success: "Alert sent to all the users" });
-      
-    };
+      payload
+    )
+    .then((response) => {
+      console.log("Successfully sent message:", response);
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
+  return res.status(200).json({ success: "Alert sent to all the users" });
+};
