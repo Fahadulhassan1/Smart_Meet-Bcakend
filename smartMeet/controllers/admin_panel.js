@@ -649,7 +649,7 @@ exports.alertToAll = async function (req, res) {
     });
     const token = employeesToken.concat(visitorsToken);
     if (token.length == 0) {
-      return res.status(400).send({ error: "No one is signedIn" });
+      return res.status(200).send({ error: "No one is signedIn" });
     }
     const payload = {
       notification: {
