@@ -34,7 +34,7 @@ exports.newAppointmentRequest = async (req, res, next) => {
     Message,
     //avatar,
   } = req.body;
-  if (Timeslot == null) {
+if (Timeslot == null || Timeslot == "" || Timeslot == undefined || Timeslot == "null-null") {
     return res.status(400).json({
       message: "Timeslot is required",
     });
