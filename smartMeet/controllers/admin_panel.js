@@ -217,7 +217,7 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
       { Date: { $lt: tomorrow } },
       { AppointmentAccepted: true },
     ],
-  }).populate("VisitorId");
+  }).populate("VisitorId").populate("employeeId");
 
   res.json(appointments);
 };
