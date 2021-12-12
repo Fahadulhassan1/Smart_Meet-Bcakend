@@ -750,10 +750,10 @@ exports.circularGraph = async function (req, res) {
         employee_count++;
       }
     });
-    data.push({Employee: employee_count });
-    data.push({ Hr: hr_count });
-    data.push({Finance: finance_count });
-    data.push({Sales: sales_count});
+    data.push( employee_count );
+    data.push( hr_count );
+    data.push( finance_count );
+    data.push(sales_count);
     
 
     res.send(data);

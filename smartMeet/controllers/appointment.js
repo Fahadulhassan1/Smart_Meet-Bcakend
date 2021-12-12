@@ -34,7 +34,11 @@ exports.newAppointmentRequest = async (req, res, next) => {
     Message,
     //avatar,
   } = req.body;
-
+  if (Timeslot == null) {
+    return res.status(400).json({
+      message: "Timeslot is required",
+    });
+  }
   const appointments = await Appointment.find({
     VisitorId: VisitorId,
     Date: Date,
