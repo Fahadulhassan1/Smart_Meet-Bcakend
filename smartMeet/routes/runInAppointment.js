@@ -2,6 +2,7 @@ const express = require("express");
 //const Upload = require("../model/upload");
 const RunInAppointment = require("../model/runInAppointment");
 const Employee = require("../model/employee");
+const User = require("../model/user");
 //const Appointment = require("../model/Appointment");
 //const User = require("../model/user");
 const jwt = require("jsonwebtoken");
@@ -100,6 +101,37 @@ router.get("/visitor/runInappointment", async (req, res) => {
   } catch (e) {
     res.status(500).send(e);
   }
+});
+
+//send push notification to employee of chat
+router.post("/visitor/chatnotification", async (req, res) => {
+  const name = req.body.name;
+  const message = req.body.message;
+  const email = req.body.email;
+
+  var visitor = await User.findOne({ email: email });
+  
+  const token = visitor.token;
+  const payload = {
+    notification: {
+      title: name,
+      body: message,
+    },
+  };
+  admin
+    .messaging()
+    .sendToDevice(
+      [token],
+
+      payload
+    )
+    .then((response) => {
+      console.log("Successfully sent message:", response);
+      res.send("success");
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
 });
 
 module.exports = router;
