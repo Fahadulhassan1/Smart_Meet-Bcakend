@@ -26,6 +26,7 @@ const {
   Appointments,
   changePassword,
   alertToAll,
+  customNotification,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -71,4 +72,5 @@ router.get("/admin/appointments", Appointments);
 //in web app change password to current password
 router.put("/admin/changePassword", changePassword);
 router.get("/admin/alertToAll", alertToAll);
+router.post("/admin/customNotification", customNotification);
 module.exports = router;

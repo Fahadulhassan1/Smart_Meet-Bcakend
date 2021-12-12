@@ -676,3 +676,48 @@ exports.alertToAll = async function (req, res) {
     res.status(400).send(error);
   }
 };
+
+exports.customNotification = async function (req, res) {
+  try {
+    const title = req.body.title;
+    const message = req.body.message;
+    const employee = await Employee.find({ token: { $ne: null } });
+    const visitor = await Visitor.find({ token: { $ne: null } });
+
+    const employeesToken = [];
+    const visitorsToken = [];
+    employee.forEach((employee) => {
+      employeesToken.push(employee.token);
+    });
+    visitor.forEach((visitor) => {
+      visitorsToken.push(visitor.token);
+    });
+    const token = employeesToken.concat(visitorsToken);
+    if (token.length == 0) {
+      return res.status(200).send({ error: "No one is signedIn" });
+    }
+    const payload = {
+      notification: {
+        title: title,
+        body: message,
+      },
+    };
+    admin
+      .messaging()
+      .sendToDevice(
+        token,
+        // "fTANfIrGRwmqpPAxO4DtLQ:APA91bHPUzHnDsFxY2hy5F8aM6WtaClEjXFoaLAZ_MORY4C9_s4Qm6D8lpJk0qSRJRtly2KTSp3optF25qnbO5GYboJ52nFS7pA0IAO5S4ZJxvw2VZAc3xdT4E_m3CxoYcq5IPcPz4ls",
+
+        payload
+      )
+      .then((response) => {
+        console.log("Successfully sent message:", response);
+      })
+      .catch((error) => {
+        console.log("Error sending message:", error);
+      });
+    return res.status(200).json({ success: "Alert sent to all the users" });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
