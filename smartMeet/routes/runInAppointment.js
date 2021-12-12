@@ -134,4 +134,34 @@ router.post("/visitor/chatnotification", async (req, res) => {
     });
 });
 
+router.post("/employee/chatnotification", async (req, res) => {
+  const name = req.body.name;
+  const message = req.body.message;
+  const email = req.body.email;
+
+  var employee = await Employee.findOne({ email: email });
+
+  const token = employee.token;
+  const payload = {
+    notification: {
+      title: name,
+      body: message,
+    },
+  };
+  admin
+    .messaging()
+    .sendToDevice(
+      [token],
+
+      payload
+    )
+    .then((response) => {
+      console.log("Successfully sent message:", response);
+      res.send("success");
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
+});
+
 module.exports = router;
