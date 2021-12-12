@@ -27,6 +27,7 @@ const {
   changePassword,
   alertToAll,
   customNotification,
+  circularGraph,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -73,4 +74,5 @@ router.get("/admin/appointments", Appointments);
 router.put("/admin/changePassword", changePassword);
 router.get("/admin/alertToAll", alertToAll);
 router.post("/admin/customNotification", customNotification);
+router.get("/admin/circularGraph", circularGraph);
 module.exports = router;

@@ -721,3 +721,45 @@ exports.customNotification = async function (req, res) {
     res.status(400).send(error);
   }
 };
+
+exports.circularGraph = async function (req, res) {
+  try {
+    const appointment = await Appointment.find({ AppointmentAccepted: true })
+      .populate("VisitorId")
+      .populate("employeeId");
+    // res.send(appointment);
+    const data = [];
+    const data1 = [];
+    const data2 = [];
+    var employee_count = 0;
+    var hr_count = 0;
+    var finance_count = 0;
+    var sales_count = 0;
+  
+    appointment.forEach((appointment) => {
+      if (appointment.employeeId.department == "HR") {
+        hr_count++;
+      }
+      if (appointment.employeeId.department == "Finance") {
+        finance_count++;
+      }
+      if (appointment.employeeId.department == "Sales") {
+        sales_count++;
+      }
+      if (appointment.employeeId.department == "Employee") {
+        employee_count++;
+      }
+    });
+    data.push({Employee: employee_count });
+    data.push({ Hr: hr_count });
+    data.push({Finance: finance_count });
+    data.push({Sales: sales_count});
+    
+
+    res.send(data);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+
+  
+}
