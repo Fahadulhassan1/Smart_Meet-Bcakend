@@ -60,7 +60,10 @@ const employeeSchema = new mongoose.Schema({
     default : false,
   
   },
-  
+  department: {
+    type: String,
+    default: "Employee",
+  },
   isRejected: {
     type: Boolean,
     default : false
