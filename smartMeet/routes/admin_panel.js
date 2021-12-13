@@ -30,6 +30,8 @@ const {
   circularGraph,
   TwentyfourHoursCheckedIn,
   last_TwentyfourHoursCheckedInAppointmentscounting,
+  TwentyfourHoursCheckedOut,
+  last_TwentyfourHoursCheckedOutAppointmentscounting,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -54,11 +56,16 @@ router.get(
   last_TwentyfourHoursCheckedInAppointmentscounting
 );
 router.get(
+  "/admin/last_TwentyfourHoursCheckedOutAppointmentscounting",
+  last_TwentyfourHoursCheckedOutAppointmentscounting
+);
+router.get(
   "/admin/nextDayAppointments",
   next_TwentyfourHoursAppointments
 );
 
 router.get("/admin/checkedInAppointments", TwentyfourHoursCheckedIn);
+router.get("/admin/twentyfourHoursCheckedOut", TwentyfourHoursCheckedOut);
 //forget password api address
 router.post("/admin/forgetPassword", forgetPassword);
 
@@ -75,6 +82,7 @@ router.get(
   "/admin/lastSevenDaysAppointmentsCounting",
   lastSevenDaysAppointmentsCounting
 );
+
 router.get("/thisandlastmonth", thisandlastmonth);
 router.get("/admin/appointments", Appointments);
 
