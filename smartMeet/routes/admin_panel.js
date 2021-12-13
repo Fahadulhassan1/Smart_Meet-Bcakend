@@ -29,6 +29,7 @@ const {
   customNotification,
   circularGraph,
   TwentyfourHoursCheckedIn,
+  last_TwentyfourHoursCheckedInAppointmentscounting,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -47,6 +48,10 @@ router.post("/admin/signIn", verifysignIn);
 router.get(
   "/admin/nextDayAppointmentscounting",
   next_TwentyfourHoursAppointmentscounting
+);
+router.get(
+  "/admin/last_TwentyfourHoursCheckedInAppointmentscounting",
+  last_TwentyfourHoursCheckedInAppointmentscounting
 );
 router.get(
   "/admin/nextDayAppointments",

@@ -202,6 +202,27 @@ exports.next_TwentyfourHoursAppointmentscounting = async (req, res) => {
 
   res.json(appointments.length);
 };
+exports.last_TwentyfourHoursCheckedInAppointmentscounting = async (req, res) => {
+  var currentDateobj = new Date();
+
+  var today = new Date();
+  const yesterday = new Date(today);
+
+  yesterday.setDate(yesterday.getDate() - 1);
+  console.log(today);
+  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
+  console.log(tomorrow);
+
+  const appointments = await Appointment.find({
+    $and: [
+      { Date: { $gt: yesterday } },
+      { Date: { $lt: today } },
+      { isChecked: true },
+    ],
+  });
+
+  res.json(appointments.length);
+};
 
 exports.next_TwentyfourHoursAppointments = async (req, res) => {
   var currentDateobj = new Date();
