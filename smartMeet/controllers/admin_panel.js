@@ -221,6 +221,29 @@ exports.next_TwentyfourHoursAppointments = async (req, res) => {
 
   res.json(appointments);
 };
+exports.TwentyfourHoursCheckedIn = async (req, res) => {
+  var currentDateobj = new Date();
+  const today = new Date();
+  const yesterday = new Date(today);
+
+  yesterday.setDate(yesterday.getDate() - 1);
+  console.log("hellow");
+  
+  console.log(today);
+  var tomorrow = new Date(currentDateobj.getTime() + 1000 * 60 * 60 * 24);
+
+  const appointments = await Appointment.find({
+    $and: [
+      { Date: { $gt: yesterday } },
+      { Date: { $lt: today } },
+      { isChecked: true },
+    ],
+  })
+    .populate("VisitorId")
+    .populate("employeeId");
+
+  res.json(appointments);
+};
 
 // //send otp throgh email to the visitor for signUp
 

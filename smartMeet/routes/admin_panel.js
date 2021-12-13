@@ -28,6 +28,7 @@ const {
   alertToAll,
   customNotification,
   circularGraph,
+  TwentyfourHoursCheckedIn,
 } = require("../controllers/admin_panel");
 router.get(
   "/employee/allUser_Without_Acctivation",
@@ -51,6 +52,8 @@ router.get(
   "/admin/nextDayAppointments",
   next_TwentyfourHoursAppointments
 );
+
+router.get("/admin/checkedInAppointments", TwentyfourHoursCheckedIn);
 //forget password api address
 router.post("/admin/forgetPassword", forgetPassword);
 
